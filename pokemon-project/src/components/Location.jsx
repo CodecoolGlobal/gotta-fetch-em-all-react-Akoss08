@@ -1,5 +1,5 @@
-function Location(location) {
-  return <h2>{location.name}</h2>;
+function Location(locationProps) {
+  return <h2>{locationProps.name}</h2>;
 }
 
 export default Location;
