@@ -1,4 +1,4 @@
-function Location({ location }) {
+function Location(location) {
   return <h2>{location.name}</h2>;
 }
 

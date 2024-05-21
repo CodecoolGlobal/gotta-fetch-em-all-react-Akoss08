@@ -9,7 +9,7 @@ function App() {
       try {
         const response = await fetch('https://pokeapi.co/api/v2/location');
         const data = await response.json();
-        setLocation(data);
+        setLocation(data.results);
       } catch (err) {
         console.error(`Error fetching the locations ${err}`);
       }
@@ -18,7 +18,7 @@ function App() {
     fetchData();
   }, []);
 
-  return <>{locations &&  locations.results.map((location) => <Location location={location}></Location>)}</>;
+  return <div className="LocationContainer">{locations && locations.map((location, index) => <Location key={index} name={location.name}></Location>)}</div>;
 }
 
 export default App;
