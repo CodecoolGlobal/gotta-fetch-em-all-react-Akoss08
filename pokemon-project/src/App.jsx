@@ -3,6 +3,8 @@ import Location from './components/Location';
 
 function App() {
   const [locations, setLocation] = useState(null);
+  const [isTherePokemon, setIsTherePokemon] = useState(true);
+  const [isLocationClicked, setIsLocationClicked] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -18,7 +20,23 @@ function App() {
     fetchData();
   }, []);
 
-  return <div className="LocationContainer">{locations && locations.map((location, index) => <Location key={index} name={location.name}></Location>)}</div>;
+  return !isLocationClicked ? (
+    <div className="LocationContainer">
+      {locations &&
+        locations.map((location, index) => (
+          <Location key={index} name={location.name} url={location.url} setIsTherePokemon={setIsTherePokemon} setIsLocationClicked={setIsLocationClicked}></Location>
+        ))}
+    </div>
+  ) : isTherePokemon ? (
+    <div>
+      <h2>There are pokemons here</h2>
+    </div>
+  ) : (
+    <div>
+      <h2>There are no pokemons here</h2>
+      <button onClick={() => setIsLocationClicked(false)}>Back</button>
+    </div>
+  );
 }
 
 export default App;
