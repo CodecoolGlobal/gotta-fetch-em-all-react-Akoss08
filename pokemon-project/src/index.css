@@ -48,31 +48,10 @@ h2:hover {
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
 
-.enemy-pokemon {
-  position: relative;
-}
-
-.enemy-pokemon img {
-  width: 15em;
-  image-rendering: pixelated;
-  margin-left: 280px;
-  margin-top: -100px;
-}
-
-.enemy-pokemon h1 {
-  position: absolute;
-  top: 0;
-  left: 75%;
-  top: -70%;
-  transform: translateX(-50%);
-  font-family: Rocher;
-  margin: 0;
-}
-
 img {
   image-rendering: pixelated;
-  height: 200px;
-  width: 200px;
+  height: 30vh;
+  width: 30vh;
 }
 
 h1 {
@@ -81,10 +60,10 @@ h1 {
   left: 45%;
 }
 
-.pokemonCard {
+.enemyPokemonCard {
   position: absolute;
-  height: 70%;
-  width: 200px;
+  height: 70vh;
+  width: 30vh;
   left: 10%;
   top: 15%;
   backdrop-filter: blur(5px);
@@ -101,10 +80,25 @@ h1 {
 .progress {
   margin-left: 10px;
 }
-#pokemonCardName {
+#enemyPokemonCardName {
   margin: 0;
   margin-left: 2%;
   font-size: xx-large;
   font-style: italic;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.optionButton {
+  position: absolute;
+  font-family: Rocher;
+  background-color: transparent;
+  top: 70%;
+  left: 45%;
+  font-size: xx-large;
+  border-width: 2px;
+  border-color: black;
+}
+
+.optionButton:hover {
+  background-color: red;
 }
