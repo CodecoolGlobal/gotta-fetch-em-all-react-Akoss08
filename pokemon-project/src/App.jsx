@@ -6,6 +6,11 @@ function App() {
   const [locations, setLocation] = useState(null);
   const [isLocationClicked, setIsLocationClicked] = useState(false);
   const [currentEnemyPokemon, setCurrentEnemyPokemon] = useState(null);
+  const [userPokemons, setUserPokemons] = useState([
+    'https://pokeapi.co/api/v2/pokemon/bulbasaur',
+    'https://pokeapi.co/api/v2/pokemon/charizard',
+    'https://pokeapi.co/api/v2/pokemon/poliwhirl',
+  ]);
 
   useEffect(() => {
     if (!isLocationClicked) {
@@ -52,9 +57,11 @@ function App() {
           {currentEnemyPokemon && (
             <Pokemon
               enemyPokemonImg={currentEnemyPokemon.sprites.other['official-artwork']['front_default']}
+              enemyPokemonModel={currentEnemyPokemon.sprites['front_default']}
               enemyPokemonStats={currentEnemyPokemon.stats}
               enemyPokemonName={currentEnemyPokemon.name}
               handleBackClick={handleBackClick}
+              userPokemons={userPokemons}
             />
           )}
         </>

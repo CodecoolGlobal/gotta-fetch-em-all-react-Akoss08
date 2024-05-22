@@ -12,7 +12,6 @@ function Location(location) {
 
         const pokemonResponse = await fetch(area['pokemon_encounters'][Math.floor(Math.random() * area['pokemon_encounters'].length)].pokemon.url);
         const pokemon = await pokemonResponse.json();
-        console.log(pokemon);
         setCurrentEnemyPokemon(pokemon);
       } else {
         setCurrentEnemyPokemon(null);
