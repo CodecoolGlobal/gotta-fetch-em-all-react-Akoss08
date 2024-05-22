@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Location from './components/Location';
 import Pokemon from './components/Pokemon';
+import Pokemon from './components/Pokemon';
 
 function App() {
   const [locations, setLocation] = useState(null);
@@ -12,7 +13,7 @@ function App() {
       try {
         const response = await fetch('https://pokeapi.co/api/v2/location');
         const data = await response.json();
-        setLocation(data.results);
+        setAllLocations(data.results);
       } catch (err) {
         console.error(`Error fetching the locations ${err}`);
       }
@@ -65,6 +66,28 @@ function App() {
   } else {
     return renderLocations();
   }
+  useEffect(() => {
+    if (!clicked) {
+      document.body.style.backgroundImage = 'url(src/images/forest.jpg)';
+      document.body.style.backgroundPosition = '';
+    } else {
+      document.body.style.backgroundImage = 'url(src/images/chrysope-battle-background-new.jpg)';
+      document.body.style.backgroundPosition = 'center';
+    }
+  }, [clicked]);
+
+  return (
+    <>
+      {clicked ? (
+        <Pokemon location={currentLocation} clicked={setClicked}/>
+      ) : (
+        <div className="locations-container">
+          {allLocations &&
+            allLocations.map((location, index) => <Location key={index} name={location.name} url={location.url} clicked={setClicked} currentLocation={setCurrentLocation} />)}
+        </div>
+      )}
+    </>
+  );
 }
 
 export default App;
