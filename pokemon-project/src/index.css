@@ -14,7 +14,7 @@ body {
   align-items: center;
 }
 
-.locations-container {
+.LocationContainer {
   font-family: Rocher;
   font-size: 1.5em;
   text-align: center;
@@ -36,15 +36,14 @@ h2:hover {
   text-decoration-color: orange;
 }
 
-.locations-container::-webkit-scrollbar-track {
+.LocationContainer::-webkit-scrollbar-track {
   padding: 2px 0;
 }
-
-.locations-container::-webkit-scrollbar {
+.LocationContainer::-webkit-scrollbar {
   width: 10px;
 }
 
-.locations-container::-webkit-scrollbar-thumb {
+.LocationContainer::-webkit-scrollbar-thumb {
   border-radius: 10px;
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
@@ -68,4 +67,44 @@ h2:hover {
   transform: translateX(-50%);
   font-family: Rocher;
   margin: 0;
+}
+
+img {
+  image-rendering: pixelated;
+  height: 200px;
+  width: 200px;
+}
+
+h1 {
+  position: absolute;
+  font-size: xx-large;
+  left: 45%;
+}
+
+.pokemonCard {
+  position: absolute;
+  height: 70%;
+  width: 200px;
+  left: 10%;
+  top: 15%;
+  backdrop-filter: blur(5px);
+  border-radius: 25px;
+  border-width: 3px;
+  border-style: solid;
+  border-color: black;
+}
+
+#progressBar {
+  margin: 0;
+}
+
+.progress {
+  margin-left: 10px;
+}
+#pokemonCardName {
+  margin: 0;
+  margin-left: 2%;
+  font-size: xx-large;
+  font-style: italic;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
