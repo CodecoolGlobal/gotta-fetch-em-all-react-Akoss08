@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import Location from './components/Location';
 import Pokemon from './components/Pokemon';
+import Pokedex from './components/Pokedex';
 
 function App() {
+  const [isPokedexClicked, setIsPokedexClicked] = useState(false);
   const [locations, setLocation] = useState(null);
   const [isLocationClicked, setIsLocationClicked] = useState(false);
   const [currentEnemyPokemon, setCurrentEnemyPokemon] = useState(null);
@@ -42,11 +44,14 @@ function App() {
 
   function renderLocations() {
     return (
-      <div className="LocationContainer">
-        {locations?.map((location, index) => (
-          <Location key={index} name={location.name} url={location.url} setIsLocationClicked={setIsLocationClicked} setCurrentEnemyPokemon={setCurrentEnemyPokemon} />
-        ))}
-      </div>
+      <>
+        <img id="pokedexButton" src={'https://upload.wikimedia.org/wikipedia/commons/5/53/Pok%C3%A9_Ball_icon.svg'} onClick={() => setIsPokedexClicked(true)}></img>
+        <div className="LocationContainer">
+          {locations?.map((location, index) => (
+            <Location key={index} name={location.name} url={location.url} setIsLocationClicked={setIsLocationClicked} setCurrentEnemyPokemon={setCurrentEnemyPokemon} />
+          ))}
+        </div>
+      </>
     );
   }
 
@@ -76,10 +81,18 @@ function App() {
     }
   }
 
+  function renderPokedex() {
+    return <Pokedex></Pokedex>;
+  }
+
   if (isLocationClicked) {
     return renderPokemons();
   } else {
-    return renderLocations();
+    if (!isPokedexClicked) {
+      return renderLocations();
+    } else {
+      return renderPokedex();
+    }
   }
 }
 
