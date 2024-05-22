@@ -45,15 +45,15 @@ function App() {
     );
   }
 
-  function renderPokemon() {
+  function renderPokemons() {
     if (currentEnemyPokemon) {
       return (
         <>
           {currentEnemyPokemon && (
             <Pokemon
-              img={currentEnemyPokemon.sprites.other['official-artwork']['front_default']}
-              stats={currentEnemyPokemon.stats}
-              pokemonName={currentEnemyPokemon.name}
+              enemyPokemonImg={currentEnemyPokemon.sprites.other['official-artwork']['front_default']}
+              enemyPokemonStats={currentEnemyPokemon.stats}
+              enemyPokemonName={currentEnemyPokemon.name}
               handleBackClick={handleBackClick}
             />
           )}
@@ -70,7 +70,7 @@ function App() {
   }
 
   if (isLocationClicked) {
-    return renderPokemon();
+    return renderPokemons();
   } else {
     return renderLocations();
   }
