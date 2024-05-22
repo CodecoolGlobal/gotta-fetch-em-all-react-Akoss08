@@ -1,5 +1,4 @@
 function ProgressBar(stat) {
-  console.log(stat.value);
 
   return (
     <div className="progress">
