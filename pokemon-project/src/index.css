@@ -9,3 +9,43 @@ body {
   min-height: 100vh;
   align-items: center;
 }
+
+img {
+  image-rendering: pixelated;
+  height: 200px;
+  width: 200px;
+}
+
+h1 {
+  position: absolute;
+  font-size: xx-large;
+  left: 45%;
+}
+
+.pokemonCard {
+  position: absolute;
+  height: 70%;
+  width: 200px;
+  left: 10%;
+  top: 25%;
+  backdrop-filter: blur(5px);
+  border-radius: 25px;
+  border-width: 3px;
+  border-style: solid;
+  border-color: black;
+}
+
+#progressBar {
+  margin: 0;
+}
+
+.progress {
+  margin-left: 10px;
+}
+#pokemonCardName {
+  margin: 0;
+  margin-left: 2%;
+  font-size: xx-large;
+  font-style: italic;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
