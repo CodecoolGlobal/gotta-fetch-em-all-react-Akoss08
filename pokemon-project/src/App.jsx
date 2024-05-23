@@ -9,6 +9,8 @@ function App() {
   const [isLocationClicked, setIsLocationClicked] = useState(false);
   const [currentEnemyPokemon, setCurrentEnemyPokemon] = useState(null);
   const [userPokemons, setUserPokemons] = useState([
+    'https://pokeapi.co/api/v2/pokemon/arceus',
+    'https://pokeapi.co/api/v2/pokemon/mewtwo',
     'https://pokeapi.co/api/v2/pokemon/bulbasaur',
     'https://pokeapi.co/api/v2/pokemon/charizard',
     'https://pokeapi.co/api/v2/pokemon/poliwhirl',
@@ -67,6 +69,9 @@ function App() {
               enemyPokemonName={currentEnemyPokemon.name}
               handleBackClick={handleBackClick}
               userPokemons={userPokemons}
+              enemyPokemon={currentEnemyPokemon}
+              setUserPokemons={setUserPokemons}
+              isLocationClicked={setIsLocationClicked}
             />
           )}
         </>
