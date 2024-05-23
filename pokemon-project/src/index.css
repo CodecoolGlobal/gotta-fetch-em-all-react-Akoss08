@@ -270,6 +270,21 @@ img {
   overflow-y: scroll;
 }
 
+.LocationContainer {
+  position: absolute;
+  font-family: Rocher;
+  font-size: 1.5em;
+  text-align: center;
+  border: 3px solid hsla(0, 0%, 20%, 0.612);
+  border-radius: 10px;
+  box-shadow: 7px 7px 5px hsla(0, 0%, 20%, 0.589);
+  height: 80%;
+  overflow: auto;
+  backdrop-filter: blur(4px);
+  top: 10%;
+  left: 32%;
+}
+
 .pokedexButtonContainer {
   display: flex;
   justify-content: center;
