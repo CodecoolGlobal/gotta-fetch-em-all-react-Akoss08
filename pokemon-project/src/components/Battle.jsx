@@ -1,43 +1,27 @@
 import { useState, useEffect } from 'react';
 import HealthBar from './HealthBar';
 
-function Battle(props) {
-  const [allyHp, setAllyHp] = useState(props.allyPokemon.stats[0].base_stat);
-  const [enemyHp, setEnemyHp] = useState(props.enemyPokemonStats[0].base_stat);
-  const [allyHealthColor, setAllyHealthColor] = useState('hsl(120, 100%, 14%)');
-  const [enemyHealthColor, setEnemyHealthColor] = useState('hsl(120, 100%, 14%)');
-  const [isCaught, setIsCaught] = useState(false);
+function Battle(properties) {
+  const [allyHp, setAllyHp] = useState(properties.allyPokemon.stats[0].base_stat);
+  const [enemyHp, setEnemyHp] = useState(properties.enemyPokemonStats[0].base_stat);
 
   useEffect(() => {
     if (enemyHp <= 0) {
-      props.setUserPokemons((prev) => [...prev, `https://pokeapi.co/api/v2/pokemon/${props.enemyPokemonName}`]);
-      setIsCaught(true);
+      properties.setUserPokemons((prev) => [...prev, `https://pokeapi.co/api/v2/pokemon/${properties.enemyPokemonName}`]);
+      properties.setIsCaught(true);
     } else if (allyHp <= 0) {
-      props.setUserPokemons((prev) => prev.filter((pokemon) => !pokemon.includes(props.allyPokemon.name)));
+      properties.setUserPokemons((prev) => prev.filter((pokemon) => !pokemon.includes(properties.allyPokemon.name)));
+      properties.setIsDead(true);
     }
   }, [enemyHp]);
 
   function handleReturnClick() {
-    props.setIsLocationClicked(false);
-  }
-
-  function getHealthBarColor(newAllyHp, newEnemyHp, currentUserPokemon, enemyPokemonStats) {
-    if (newAllyHp < currentUserPokemon.stats[0].base_stat * 0.75) {
-      setAllyHealthColor('hsl(35, 100%, 35%)');
-      if (newAllyHp < currentUserPokemon.stats[0].base_stat * 0.25) {
-        setAllyHealthColor('hsl(0, 100%, 35%)');
-      }
-    }
-
-    if (newEnemyHp < enemyPokemonStats[0].base_stat * 0.75) {
-      setEnemyHealthColor('hsl(35, 100%, 35%)');
-      if (newEnemyHp < enemyPokemonStats[0].base_stat * 0.25) {
-        setEnemyHealthColor('hsl(0, 100%, 35%)');
-      }
-    }
+    properties.setIsLocationClicked(false);
   }
 
   function handleAttack(currentUserPokemon, enemyPokemonStats) {
+    const audio = new Audio('/src/components/audio/Wood Rattle.mp3');
+    audio.play();
     const allyPokemonAttack = currentUserPokemon.stats[1].base_stat;
     const enemyPokemonAttack = enemyPokemonStats[1].base_stat;
 
@@ -53,54 +37,43 @@ function Battle(props) {
     const newEnemyHp = enemyHp - allyDamageFormula;
     const newAllyHp = allyHp - enemyDamageFormula;
 
-    getHealthBarColor(newAllyHp, newEnemyHp, currentUserPokemon, props.enemyPokemonStats);
-
     setEnemyHp(newEnemyHp);
     setAllyHp(newAllyHp);
   }
 
-  function handleDead() {
-    props.setIsDead(true);
-  }
-
   if (allyHp > 0 && enemyHp > 0) {
     return (
-      <div>
-        <button className="runButton" onClick={props.handleBackClick}>
-          Runaway
-        </button>
-        <button className="attackButton" onClick={() => handleAttack(props.allyPokemon, props.enemyPokemonStats)}>
-          Attack
-        </button>
-        <HealthBar
-          allyHp={allyHp}
-          allyHealth={props.allyPokemon.stats[0].base_stat}
-          enemyHp={enemyHp}
-          enemyHealth={props.enemyPokemonStats[0].base_stat}
-          allyColor={allyHealthColor}
-          enemyColor={enemyHealthColor}
-        />
-        <h1 className="allyHp">{allyHp}</h1>
-        <h1 className="enemyHp">{enemyHp}</h1>
-      </div>
+      <>
+        {setTimeout(() => handleAttack(properties.allyPokemon, properties.enemyPokemonStats), 1000)}
+        <div>
+          <button className="runButton" onClick={properties.handleBackClick}>
+            Runaway
+          </button>
+          <HealthBar allyHp={allyHp} allyHealth={properties.allyPokemon.stats[0].base_stat} enemyHp={enemyHp} enemyHealth={properties.enemyPokemonStats[0].base_stat} />
+          <h1 className="allyHp">{allyHp}</h1>
+          <h1 className="enemyHp">{enemyHp}</h1>
+        </div>
+      </>
     );
   } else if (allyHp <= 0) {
     return (
       <>
-        {handleDead()}
         <img className="tombstone" src="/src/images/—Pngtree—creative halloween tombstone_1541022.png" />
         <h1 className="lost">
-          {props.allyPokemon.name} was brutally murdered by {props.enemyPokemonName}
+          {properties.allyPokemon.name} was brutally murdered by {properties.enemyPokemonName}
         </h1>
         <button onClick={handleReturnClick} className="return">
           Return
         </button>
       </>
     );
-  } else if (isCaught) {
+  } else if (enemyHp <= 0) {
+    const audio = new Audio('/src/components/audio/zombie-screaming-207590.mp3');
+    audio.play();
     return (
       <>
-        <h1 className="win">You Caught {props.enemyPokemonName}</h1>
+        <img className="pokeball" src="/src/images/m2i8N4N4K9i8N4i8-removebg-preview.png" />
+        <h1 className="win">You Caught {properties.enemyPokemonName}</h1>
         <button onClick={handleReturnClick} className="return">
           Return
         </button>
