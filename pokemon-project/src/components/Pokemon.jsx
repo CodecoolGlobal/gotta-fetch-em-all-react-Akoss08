@@ -1,9 +1,12 @@
+import Battle from './Battle';
 import ProgressBar from './ProgressBar';
 import { useState, useEffect } from 'react';
 
 function Pokemon(pokemon) {
   const [currentUserPokemon, setCurrentUserPokemon] = useState(null);
   const [currentPokemonIndex, setCurrentPokemonIndex] = useState(0);
+  const [isBattleClicked, setIsBattleClicked] = useState(false);
+  const [isDead, setIsDead] = useState(false);
 
   function getNextPokemon() {
     if (currentPokemonIndex !== pokemon.userPokemons.length - 1) {
@@ -30,7 +33,7 @@ function Pokemon(pokemon) {
   function renderEnemyPokemonCard() {
     return (
       <div className="enemyPokemonCard">
-        <h2 id="enemyPokemonCardName">{pokemon.enemyPokemonName}</h2>
+        <h2 id="PokemonCardName">{pokemon.enemyPokemonName}</h2>
         <img src={pokemon.enemyPokemonImg}></img>
         {pokemon.enemyPokemonStats.map((stat, index) => (
           <ProgressBar key={index} value={stat['base_stat']} name={stat.stat.name}></ProgressBar>
@@ -61,19 +64,51 @@ function Pokemon(pokemon) {
     if (currentUserPokemon) {
       return <img id="userPokemonModel" src={currentUserPokemon.sprites['back_default']}></img>;
     }
+    if (isDead) {
+      return <img id="userPokemonModel" src={currentUserPokemon.sprites['back_default']} style={{ display: 'none' }}></img>;
+    }
   }
 
-  return (
-    <>
-      {renderEnemyPokemonCard()}
-      {renderEnemyPokemonModel()}
-      <button className="optionButton" onClick={pokemon.handleBackClick}>
-        Runaway
-      </button>
-      {currentUserPokemon && renderUserPokemonCard()}
-      {renderUserPokemonModel()}
-    </>
-  );
+  function handleBattle() {
+    setIsBattleClicked(true);
+  }
+
+  if (isBattleClicked) {
+    return (
+      <>
+        {renderEnemyPokemonModel()}
+        <Battle
+          currentAllyPokemon={currentUserPokemon}
+          enemyPokemonStats={pokemon.enemyPokemonStats}
+          allyPokemon={currentUserPokemon}
+          handleBackClick={pokemon.handleBackClick}
+          enemyPokemonName={pokemon.enemyPokemonName}
+          setUserPokemons={pokemon.setUserPokemons}
+          userPokemons={pokemon.userPokemons}
+          setIsLocationClicked={pokemon.isLocationClicked}
+          setIsDead={setIsDead}
+        />
+        {renderUserPokemonModel()}
+      </>
+    );
+  } else {
+    return (
+      <>
+        {renderEnemyPokemonCard()}
+        {renderEnemyPokemonModel()}
+        <div>
+          <button className="runButton" onClick={pokemon.handleBackClick}>
+            Runaway
+          </button>
+          <button className="attackButton" onClick={handleBattle}>
+            Battle
+          </button>
+        </div>
+        {currentUserPokemon && renderUserPokemonCard()}
+        {renderUserPokemonModel()}
+      </>
+    );
+  }
 }
 
 export default Pokemon;
