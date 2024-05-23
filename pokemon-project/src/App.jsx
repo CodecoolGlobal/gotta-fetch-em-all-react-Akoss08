@@ -62,7 +62,7 @@ function App() {
           {currentEnemyPokemon && (
             <Pokemon
               enemyPokemonImg={currentEnemyPokemon.sprites.other['official-artwork']['front_default']}
-              enemyPokemonModel={currentEnemyPokemon.sprites['front_default']}
+              enemyPokemonModel={currentEnemyPokemon.sprites.other.showdown['front_default']}
               enemyPokemonStats={currentEnemyPokemon.stats}
               enemyPokemonName={currentEnemyPokemon.name}
               handleBackClick={handleBackClick}
@@ -82,7 +82,7 @@ function App() {
   }
 
   function renderPokedex() {
-    return <Pokedex></Pokedex>;
+    return <Pokedex handleBackClick={setIsPokedexClicked}></Pokedex>;
   }
 
   if (isLocationClicked) {
