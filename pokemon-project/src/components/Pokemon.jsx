@@ -8,7 +8,8 @@ function Pokemon(pokemon) {
   const [isBattleClicked, setIsBattleClicked] = useState(false);
   const [isDead, setIsDead] = useState(false);
   const [isCaught, setIsCaught] = useState(false);
-  const initialRef = useRef(null);
+  const enemyRef = useRef(null);
+  const allyRef = useRef(null);
 
   function getNextPokemon() {
     if (currentPokemonIndex !== pokemon.userPokemons.length - 1) {
@@ -69,10 +70,10 @@ function Pokemon(pokemon) {
           <img
             src={pokemon.enemyPokemonModel}
             className="caughtPokemon"
-            ref={initialRef}
+            ref={enemyRef}
             onAnimationEnd={() => {
-              if (initialRef.current) {
-                initialRef.current.style.display = 'none';
+              if (enemyRef.current) {
+                enemyRef.current.style.display = 'none';
               }
             }}
           ></img>
@@ -85,7 +86,21 @@ function Pokemon(pokemon) {
 
   function renderUserPokemonModel() {
     if (isDead) {
-      return <img id="userPokemonModel" src={currentUserPokemon.sprites.other.showdown['back_default']} style={{ display: 'none' }}></img>;
+      return (
+        <>
+          <img
+            id="userPokemonModel"
+            src={currentUserPokemon.sprites.other.showdown['back_default']}
+            className="allyDead"
+            ref={allyRef}
+            onAnimationEnd={() => {
+              if (allyRef.current) {
+                allyRef.current.style.display = 'none';
+              }
+            }}
+          ></img>
+        </>
+      );
     } else {
       return <img id="userPokemonModel" src={currentUserPokemon.sprites.other.showdown['back_default']}></img>;
     }

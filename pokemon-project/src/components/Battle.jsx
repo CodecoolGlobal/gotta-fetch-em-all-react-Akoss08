@@ -56,6 +56,8 @@ function Battle(properties) {
       </>
     );
   } else if (allyHp <= 0) {
+    const audio = new Audio('/src/components/audio/videogame-death-sound-43894.mp3');
+    audio.play();
     return (
       <>
         <img className="tombstone" src="/src/images/—Pngtree—creative halloween tombstone_1541022.png" />
@@ -68,7 +70,7 @@ function Battle(properties) {
       </>
     );
   } else if (enemyHp <= 0) {
-    const audio = new Audio('/src/components/audio/zombie-screaming-207590.mp3');
+    const audio = new Audio('/src/components/audio/cute-level-up-3-189853.mp3');
     audio.play();
     return (
       <>
