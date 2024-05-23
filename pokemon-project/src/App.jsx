@@ -6,6 +6,8 @@ import Pokedex from './components/Pokedex';
 function App() {
   const [isPokedexClicked, setIsPokedexClicked] = useState(false);
   const [locations, setLocation] = useState(null);
+  const [page, setPage] = useState(`https://pokeapi.co/api/v2/location?`);
+  const [pageNumber, setPageNumber] = useState(0)
   const [isLocationClicked, setIsLocationClicked] = useState(false);
   const [currentEnemyPokemon, setCurrentEnemyPokemon] = useState(null);
   const [userPokemons, setUserPokemons] = useState([
@@ -28,7 +30,7 @@ function App() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch('https://pokeapi.co/api/v2/location');
+        const response = await fetch(`${page}offset=${pageNumber}&limit=20`);
         const data = await response.json();
         setLocation(data.results);
       } catch (err) {
@@ -37,21 +39,45 @@ function App() {
     }
 
     fetchData();
-  }, []);
+  }, [pageNumber]);
 
   const handleBackClick = () => {
     setIsLocationClicked(false);
   };
 
+  function handleNextButton() {
+
+    setPageNumber(pageNumber + 20)
+
+  }
+
+  function handleBackButton() {
+    if (pageNumber > 0) {
+
+      setPageNumber(pageNumber - 20)
+    }
+
+  }
+
   function renderLocations() {
     return (
       <>
-        <img id="pokedexButton" src={'https://upload.wikimedia.org/wikipedia/commons/5/53/Pok%C3%A9_Ball_icon.svg'} onClick={() => setIsPokedexClicked(true)}></img>
+        <img id="pokedexButton" src={'https://upload.wikimedia.org/wikipedia/commons/5/53/Pok%C3%A9_Ball_icon.svg'}
+          onClick={() => setIsPokedexClicked(true)}></img>
         <div className="LocationContainer">
+
           {locations?.map((location, index) => (
-            <Location key={index} name={location.name} url={location.url} setIsLocationClicked={setIsLocationClicked} setCurrentEnemyPokemon={setCurrentEnemyPokemon} />
+            <Location key={index}
+              name={location.name}
+              url={location.url}
+              setIsLocationClicked={setIsLocationClicked}
+              setPage={setPage}
+              setPageNumber={setPageNumber}
+              setCurrentEnemyPokemon={setCurrentEnemyPokemon} />
           ))}
         </div>
+        <button className='pageBack' onClick={handleBackButton}>Back</button>
+        <button className='pageNext' onClick={handleNextButton}>Next</button>
       </>
     );
   }
