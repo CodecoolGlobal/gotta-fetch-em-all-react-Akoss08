@@ -279,6 +279,7 @@ img {
   border-radius: 10px;
   box-shadow: 7px 7px 5px hsla(0, 0%, 20%, 0.589);
   height: 80%;
+  width: 37%;
   overflow: auto;
   backdrop-filter: blur(4px);
   top: 10%;
