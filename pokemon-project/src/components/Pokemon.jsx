@@ -1,12 +1,14 @@
 import Battle from './Battle';
 import ProgressBar from './ProgressBar';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 function Pokemon(pokemon) {
   const [currentUserPokemon, setCurrentUserPokemon] = useState(null);
   const [currentPokemonIndex, setCurrentPokemonIndex] = useState(0);
   const [isBattleClicked, setIsBattleClicked] = useState(false);
   const [isDead, setIsDead] = useState(false);
+  const [isCaught, setIsCaught] = useState(false);
+  const initialRef = useRef(null);
 
   function getNextPokemon() {
     if (currentPokemonIndex !== pokemon.userPokemons.length - 1) {
@@ -50,22 +52,42 @@ function Pokemon(pokemon) {
         {currentUserPokemon.stats.map((stat, index) => (
           <ProgressBar key={index} value={stat['base_stat']} name={stat.stat.name}></ProgressBar>
         ))}
-        <button onClick={getPreviousPokemon}>Previous</button>
-        <button onClick={getNextPokemon}>Next</button>
+        <button onClick={getPreviousPokemon} className="previous">
+          Previous
+        </button>
+        <button onClick={getNextPokemon} className="next">
+          Next
+        </button>
       </div>
     );
   }
 
   function renderEnemyPokemonModel() {
-    return <img id="enemyPokemonModel" src={pokemon.enemyPokemonModel}></img>;
+    if (isCaught) {
+      return (
+        <>
+          <img
+            src={pokemon.enemyPokemonModel}
+            className="caughtPokemon"
+            ref={initialRef}
+            onAnimationEnd={() => {
+              if (initialRef.current) {
+                initialRef.current.style.display = 'none';
+              }
+            }}
+          ></img>
+        </>
+      );
+    } else {
+      return <img id="enemyPokemonModel" src={pokemon.enemyPokemonModel}></img>;
+    }
   }
 
   function renderUserPokemonModel() {
-    if (currentUserPokemon) {
-      return <img id="userPokemonModel" src={currentUserPokemon.sprites['back_default']}></img>;
-    }
     if (isDead) {
-      return <img id="userPokemonModel" src={currentUserPokemon.sprites['back_default']} style={{ display: 'none' }}></img>;
+      return <img id="userPokemonModel" src={currentUserPokemon.sprites.other.showdown['back_default']} style={{ display: 'none' }}></img>;
+    } else {
+      return <img id="userPokemonModel" src={currentUserPokemon.sprites.other.showdown['back_default']}></img>;
     }
   }
 
@@ -87,6 +109,7 @@ function Pokemon(pokemon) {
           userPokemons={pokemon.userPokemons}
           setIsLocationClicked={pokemon.isLocationClicked}
           setIsDead={setIsDead}
+          setIsCaught={setIsCaught}
         />
         {renderUserPokemonModel()}
       </>
@@ -105,7 +128,7 @@ function Pokemon(pokemon) {
           </button>
         </div>
         {currentUserPokemon && renderUserPokemonCard()}
-        {renderUserPokemonModel()}
+        {currentUserPokemon && renderUserPokemonModel()}
       </>
     );
   }
