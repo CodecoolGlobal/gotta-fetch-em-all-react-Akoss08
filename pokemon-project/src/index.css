@@ -736,3 +736,26 @@ progress[value]::-moz-progress-bar {
   right: 2.5%;
   border: none;
 }
+
+.pageNext{
+  position: absolute;
+  right: 20%;
+  top: 50%;
+  font-size: 3rem;
+  font-family: 'Rocher';
+  background: none;
+  border: none;
+  cursor: pointer;
+
+}
+
+.pageBack{
+  position: absolute;
+  left: 20%;
+  top: 50%;
+  font-size: 3em;
+  font-family: 'Rocher';
+  background: none;
+  border: none;
+  cursor: pointer;
+}
