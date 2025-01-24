@@ -10,7 +10,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/CodecoolGlobal/gotta-fetch-em-all-react-Akoss08">
-    <img src="pokemon-project/src/images/mewtwo.jpg" alt="Logo" width="90" height="90" style="border-radius: 50%">
+    <img src="pokemon-project/src/images/mewtwo.jpg" alt="Logo" width="90" height="90">
   </a>
 
   <h3 align="center">Gotta fetch 'em all</h3>
