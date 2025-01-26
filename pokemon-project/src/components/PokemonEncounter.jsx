@@ -2,7 +2,7 @@ import Battle from './Battle';
 import ProgressBar from './ProgressBar';
 import { useState, useEffect, useRef } from 'react';
 
-function Pokemon(pokemon) {
+function PokemonEncounter(pokemon) {
   const [currentUserPokemon, setCurrentUserPokemon] = useState(null);
   const [currentPokemonIndex, setCurrentPokemonIndex] = useState(0);
   const [isBattleClicked, setIsBattleClicked] = useState(false);
@@ -149,4 +149,4 @@ function Pokemon(pokemon) {
   }
 }
 
-export default Pokemon;
+export default PokemonEncounter;
