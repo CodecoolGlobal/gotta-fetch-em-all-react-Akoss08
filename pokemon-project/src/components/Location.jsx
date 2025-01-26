@@ -1,33 +1,13 @@
-function Location(location) {
-  async function getEnemyPokemonByArea(url, setIsLocationClicked, setCurrentEnemyPokemon) {
-    try {
-      let randomIndex = 0;
-      const locationResponse = await fetch(url);
-      const location = await locationResponse.json();
+import { useNavigate } from 'react-router-dom';
 
-      if (location.areas.length > 0) {
-        randomIndex = Math.floor(Math.random() * location.areas.length);
-        const areaResponse = await fetch(location.areas[randomIndex].url);
-        const area = await areaResponse.json();
+function Location({ locationName, locationUrl }) {
+  const navigate = useNavigate();
 
-        const pokemonResponse = await fetch(area['pokemon_encounters'][Math.floor(Math.random() * area['pokemon_encounters'].length)].pokemon.url);
-        const pokemon = await pokemonResponse.json();
-        setCurrentEnemyPokemon(pokemon);
-      } else {
-        setCurrentEnemyPokemon(null);
-      }
-    } catch (err) {
-      console.error(`Error fetching from ${url}`);
-    } finally {
-      setIsLocationClicked(true);
-    }
+  function handleLocationClick() {
+    navigate(`/${locationName}`, { state: { locationUrl } });
   }
 
-  return (
-    <>
-      <h2 onClick={() => getEnemyPokemonByArea(location.url, location.setIsLocationClicked, location.setCurrentEnemyPokemon)}>{location.name}</h2>
-    </>
-  );
+  return <h2 onClick={handleLocationClick}>{locationName}</h2>;
 }
 
 export default Location;
