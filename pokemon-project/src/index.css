@@ -27,6 +27,18 @@ body,
   background-size: cover;
 }
 
+.battleGround {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100vw;
+  height: 100vh;
+  width: 100vw;
+  background-image: url('src/images/chrysope-battle-background-new.jpg');
+  background-position: center;
+}
+
 .LocationContainer::-webkit-scrollbar-track,
 .pokedexContainer::-webkit-scrollbar-track,
 .typeIcons::-webkit-scrollbar-track {
@@ -51,30 +63,12 @@ img {
   width: 30vh;
 }
 
-.enemyPokemonCard {
-  text-align: center;
-  overflow: auto;
-  position: absolute;
-  height: 86vh;
-  width: 50vh;
-  right: 5%;
-  top: 5%;
-  backdrop-filter: blur(5px);
-  border: 3px solid hsla(0, 0%, 20%, 0.612);
-  border-radius: 10px;
-  box-shadow: 7px 7px 5px hsla(0, 0%, 20%, 0.589);
-  p {
-    font-weight: bold;
-  }
-}
-
 .pokemonCard {
   text-align: center;
   overflow: auto;
   position: absolute;
-  height: 86vh;
+  height: 87vh;
   width: 50vh;
-  left: 5%;
   top: 5%;
   backdrop-filter: blur(5px);
   border: 3px solid hsla(0, 0%, 20%, 0.612);
@@ -85,30 +79,12 @@ img {
   }
 }
 
-.pokemonCard::-webkit-scrollbar-track {
-  padding: 2px 0;
+.enemyCard {
+  right: 5%;
 }
 
-.pokemonCard::-webkit-scrollbar {
-  width: 10px;
-}
-
-.pokemonCard::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-}
-
-.enemyPokemonCard::-webkit-scrollbar-track {
-  padding: 2px 0;
-}
-
-.enemyPokemonCard::-webkit-scrollbar {
-  width: 10px;
-}
-
-.enemyPokemonCard::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+.allyCard {
+  left: 5%;
 }
 
 #PokemonCardName {
@@ -152,13 +128,13 @@ img {
   background-color: hsl(120, 100%, 15%);
 }
 
-#enemyPokemonModel {
+.enemyPokemonModel {
   position: absolute;
   top: 30%;
   right: 30%;
 }
 
-#userPokemonModel {
+.userPokemonModel {
   position: absolute;
   top: 55%;
   left: 27%;
@@ -242,18 +218,6 @@ img {
   background-color: red;
 }
 
-#enemyPokemonModel {
-  position: absolute;
-  top: 30%;
-  right: 30%;
-}
-
-#userPokemonModel {
-  position: absolute;
-  top: 55%;
-  left: 27%;
-}
-
 #pokedexButton {
   position: absolute;
   right: 2%;
@@ -300,7 +264,7 @@ img {
   top: 10%;
   left: 32%;
   h2 {
-    cursor: pointer; 
+    cursor: pointer;
     transition: font-size 0.3s ease;
   }
   h2:hover {
@@ -369,12 +333,15 @@ progress[value]::-moz-progress-bar {
 .red {
   background-color: #ff0000;
 }
+
 .yellow {
   background-color: #fecb65;
 }
+
 .green {
   background-color: #32cb65;
 }
+
 .blue {
   background-color: #3298cb;
 }
@@ -382,12 +349,15 @@ progress[value]::-moz-progress-bar {
 .light-blue {
   background-color: #85bdfe;
 }
+
 .light-red {
   background-color: #fe98cb;
 }
+
 .light-yellow {
   background-color: #fefecb;
 }
+
 .light-green {
   background-color: #98fe00;
 }
@@ -746,9 +716,6 @@ progress[value]::-moz-progress-bar {
 }
 
 .caughtPokemon {
-  position: absolute;
-  top: 30%;
-  right: 30%;
   border-radius: 50%;
   animation-name: toPokeBall;
   animation-duration: 2s;
