@@ -1,152 +1,104 @@
+import { useLocation, useNavigate } from 'react-router-dom';
 import Battle from './Battle';
-import ProgressBar from './ProgressBar';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
+import EnemyPokemonCard from './EnemyPokemonCard';
+import AllyPokemonCard from './AllyPokemonCard';
+import PokemonModel from './PokemonModel';
 
-function PokemonEncounter(pokemon) {
-  const [currentUserPokemon, setCurrentUserPokemon] = useState(null);
-  const [currentPokemonIndex, setCurrentPokemonIndex] = useState(0);
-  const [isBattleClicked, setIsBattleClicked] = useState(false);
+function PokemonEncounter() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { locationUrl } = location.state;
+
+  const [allyPokemons, setAllyPokemons] = useState([
+    'https://pokeapi.co/api/v2/pokemon/wailord',
+    'https://pokeapi.co/api/v2/pokemon/mewtwo',
+    'https://pokeapi.co/api/v2/pokemon/gengar',
+  ]);
+  const [enemyPokemon, setEnemyPokemon] = useState(null);
+  const [emptyLocation, setEmptyLocation] = useState(false);
+  const [selectedAllyPokemon, setSelectedAllyPokemon] = useState(null);
   const [isDead, setIsDead] = useState(false);
   const [isCaught, setIsCaught] = useState(false);
-  const enemyRef = useRef(null);
-  const allyRef = useRef(null);
+  const [currentPokemonIndex, setCurrentPokemonIndex] = useState(0);
+
+  useEffect(() => {
+    async function fetchEnemyPokemon() {
+      try {
+        const locationResponse = await fetch(locationUrl);
+        const location = await locationResponse.json();
+
+        if (location.areas.length) {
+          const randomIndex = Math.floor(Math.random() * location.areas.length);
+          const areaResponse = await fetch(location.areas[randomIndex].url);
+          const area = await areaResponse.json();
+
+          const pokemonResponse = await fetch(area['pokemon_encounters'][Math.floor(Math.random() * area['pokemon_encounters'].length)].pokemon.url);
+          const pokemon = await pokemonResponse.json();
+          console.log(pokemon);
+          setEnemyPokemon(pokemon);
+        } else {
+          setEmptyLocation(true);
+        }
+      } catch (error) {
+        console.error(`Error fetching from ${locationUrl}`);
+      }
+    }
+
+    fetchEnemyPokemon();
+  }, [locationUrl]);
+
+  useEffect(() => {
+    async function fetchPokemonInfo() {
+      const response = await fetch(allyPokemons[currentPokemonIndex]);
+      const data = await response.json();
+      setSelectedAllyPokemon(data);
+    }
+
+    fetchPokemonInfo();
+  }, [currentPokemonIndex, allyPokemons]);
 
   function getNextPokemon() {
-    if (currentPokemonIndex !== pokemon.userPokemons.length - 1) {
+    if (currentPokemonIndex < allyPokemons.length - 1) {
       setCurrentPokemonIndex(currentPokemonIndex + 1);
     }
   }
 
   function getPreviousPokemon() {
-    if (currentPokemonIndex !== 0) {
+    if (currentPokemonIndex > 0) {
       setCurrentPokemonIndex(currentPokemonIndex - 1);
     }
   }
 
-  useEffect(() => {
-    async function fetchPokemonInfo() {
-      const response = await fetch(pokemon.userPokemons[currentPokemonIndex]);
-      const data = await response.json();
-      setCurrentUserPokemon(data);
-    }
-
-    fetchPokemonInfo();
-  }, [currentPokemonIndex]);
-
-  function renderEnemyPokemonCard() {
-    return (
-      <div className="enemyPokemonCard">
-        <h2 id="PokemonCardName">{pokemon.enemyPokemonName}</h2>
-        <img src={pokemon.enemyPokemonImg}></img>
-        {pokemon.enemyPokemonStats.map((stat, index) => (
-          <ProgressBar key={index} value={stat['base_stat']} name={stat.stat.name}></ProgressBar>
-        ))}
-      </div>
-    );
-  }
-
-  function renderUserPokemonCard() {
-    return (
-      <div className="pokemonCard">
-        <h2 id="PokemonCardName">{currentUserPokemon.name}</h2>
-        <img src={currentUserPokemon.sprites.other['official-artwork']['front_default']}></img>
-        {currentUserPokemon.stats.map((stat, index) => (
-          <ProgressBar key={index} value={stat['base_stat']} name={stat.stat.name}></ProgressBar>
-        ))}
-        <button onClick={getPreviousPokemon} className="previous">
-          Previous
-        </button>
-        <button onClick={getNextPokemon} className="next">
-          Next
-        </button>
-      </div>
-    );
-  }
-
-  function renderEnemyPokemonModel() {
-    if (isCaught) {
-      return (
+  return (
+    <div className="battleGround">
+      {enemyPokemon && (
         <>
-          <img
-            src={pokemon.enemyPokemonModel}
-            className="caughtPokemon"
-            ref={enemyRef}
-            onAnimationEnd={() => {
-              if (enemyRef.current) {
-                enemyRef.current.style.display = 'none';
-              }
-            }}
-          ></img>
+          <EnemyPokemonCard pokemon={enemyPokemon} />
+          <PokemonModel
+            sprite={enemyPokemon.sprites.other.showdown['front_default']}
+            isLost={isCaught}
+            baseClass={'enemyPokemonModel'}
+            lostBattleClass={'caughtPokemon'}
+          />
         </>
-      );
-    } else {
-      return <img id="enemyPokemonModel" src={pokemon.enemyPokemonModel}></img>;
-    }
-  }
+      )}
 
-  function renderUserPokemonModel() {
-    if (isDead) {
-      return (
+      <div>
+        <button className="runButton" onClick={() => navigate('/')}>
+          Runaway
+        </button>
+        <button className="attackButton">Battle</button>
+      </div>
+
+      {selectedAllyPokemon && (
         <>
-          <img
-            id="userPokemonModel"
-            src={currentUserPokemon.sprites.other.showdown['back_default']}
-            className="allyDead"
-            ref={allyRef}
-            onAnimationEnd={() => {
-              if (allyRef.current) {
-                allyRef.current.style.display = 'none';
-              }
-            }}
-          ></img>
+          <AllyPokemonCard pokemon={selectedAllyPokemon} getPreviousPokemon={getPreviousPokemon} getNextPokemon={getNextPokemon} />
+          <PokemonModel sprite={selectedAllyPokemon.sprites.other.showdown['back_default']} isLost={isDead} baseClass={'userPokemonModel'} lostBattleClass={'allyDead'} />
         </>
-      );
-    } else {
-      return <img id="userPokemonModel" src={currentUserPokemon.sprites.other.showdown['back_default']}></img>;
-    }
-  }
-
-  function handleBattle() {
-    setIsBattleClicked(true);
-  }
-
-  if (isBattleClicked) {
-    return (
-      <>
-        {renderEnemyPokemonModel()}
-        <Battle
-          currentAllyPokemon={currentUserPokemon}
-          enemyPokemonStats={pokemon.enemyPokemonStats}
-          allyPokemon={currentUserPokemon}
-          handleBackClick={pokemon.handleBackClick}
-          enemyPokemonName={pokemon.enemyPokemonName}
-          setUserPokemons={pokemon.setUserPokemons}
-          userPokemons={pokemon.userPokemons}
-          setIsLocationClicked={pokemon.isLocationClicked}
-          setIsDead={setIsDead}
-          setIsCaught={setIsCaught}
-        />
-        {renderUserPokemonModel()}
-      </>
-    );
-  } else {
-    return (
-      <>
-        {renderEnemyPokemonCard()}
-        {renderEnemyPokemonModel()}
-        <div>
-          <button className="runButton" onClick={pokemon.handleBackClick}>
-            Runaway
-          </button>
-          <button className="attackButton" onClick={handleBattle}>
-            Battle
-          </button>
-        </div>
-        {currentUserPokemon && renderUserPokemonCard()}
-        {currentUserPokemon && renderUserPokemonModel()}
-      </>
-    );
-  }
+      )}
+    </div>
+  );
 }
 
 export default PokemonEncounter;
