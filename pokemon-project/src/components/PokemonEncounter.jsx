@@ -14,13 +14,16 @@ function PokemonEncounter() {
     'https://pokeapi.co/api/v2/pokemon/wailord',
     'https://pokeapi.co/api/v2/pokemon/mewtwo',
     'https://pokeapi.co/api/v2/pokemon/gengar',
-  ]);
+  ];
+
+  const [allyPokemons, setAllyPokemons] = useState(storedAllyPokemons);
   const [enemyPokemon, setEnemyPokemon] = useState(null);
-  const [emptyLocation, setEmptyLocation] = useState(false);
+  const [isEmptyLocation, setIsEmptyLocation] = useState(false);
   const [selectedAllyPokemon, setSelectedAllyPokemon] = useState(null);
   const [isDead, setIsDead] = useState(false);
   const [isCaught, setIsCaught] = useState(false);
   const [currentPokemonIndex, setCurrentPokemonIndex] = useState(0);
+  const [isBattleStarted, setIsBattleStarted] = useState(false);
 
   useEffect(() => {
     async function fetchEnemyPokemon() {
@@ -35,10 +38,10 @@ function PokemonEncounter() {
 
           const pokemonResponse = await fetch(area['pokemon_encounters'][Math.floor(Math.random() * area['pokemon_encounters'].length)].pokemon.url);
           const pokemon = await pokemonResponse.json();
-          console.log(pokemon);
+
           setEnemyPokemon(pokemon);
         } else {
-          setEmptyLocation(true);
+          setIsEmptyLocation(true);
         }
       } catch (error) {
         console.error(`Error fetching from ${locationUrl}`);
@@ -56,7 +59,11 @@ function PokemonEncounter() {
     }
 
     fetchPokemonInfo();
-  }, [currentPokemonIndex, allyPokemons]);
+  }, [currentPokemonIndex]);
+
+  useEffect(() => {
+    localStorage.setItem('allyPokemons', JSON.stringify(allyPokemons));
+  }, [allyPokemons]);
 
   function getNextPokemon() {
     if (currentPokemonIndex < allyPokemons.length - 1) {
