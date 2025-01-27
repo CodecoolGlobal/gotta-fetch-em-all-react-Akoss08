@@ -1,45 +1,68 @@
 import { useState, useEffect } from 'react';
 import HealthBar from './HealthBar';
+import { useNavigate } from 'react-router-dom';
 
-function Battle(properties) {
-  const [allyHp, setAllyHp] = useState(properties.allyPokemon.stats[0].base_stat);
-  const [enemyHp, setEnemyHp] = useState(properties.enemyPokemonStats[0].base_stat);
+function Battle({ allyPokemon, enemyPokemon, setIsCaught, setIsDead, setAllyPokemons }) {
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (enemyHp <= 0) {
-      properties.setUserPokemons((prev) => [...prev, `https://pokeapi.co/api/v2/pokemon/${properties.enemyPokemonName}`]);
-      properties.setIsCaught(true);
-    } else if (allyHp <= 0) {
-      properties.setUserPokemons((prev) => prev.filter((pokemon) => !pokemon.includes(properties.allyPokemon.name)));
-      properties.setIsDead(true);
-    }
-  }, [enemyHp]);
+  const [allyHp, setAllyHp] = useState(allyPokemon.stats[0].base_stat);
+  const [enemyHp, setEnemyHp] = useState(enemyPokemon.stats[0].base_stat);
 
-  function handleReturnClick() {
-    properties.setIsLocationClicked(false);
-  }
+  const [battleOngoing, setBattleOngoing] = useState(true);
 
-  function handleAttack(currentUserPokemon, enemyPokemonStats) {
-    const audio = new Audio('/src/components/audio/Wood Rattle.mp3');
+  function playAudio(src) {
+    const audio = new Audio(src);
     audio.play();
-    const allyPokemonAttack = currentUserPokemon.stats[1].base_stat;
-    const enemyPokemonAttack = enemyPokemonStats[1].base_stat;
-
-    const allyPokemonDefense = currentUserPokemon.stats[2].base_stat;
-    const enemyPokemonDefense = enemyPokemonStats[2].base_stat;
-
-    const randomAllyInteger = Math.floor(Math.random() * 38) + 217;
-    const randomEnemyInteger = Math.floor(Math.random() * 38) + 217;
-
-    const allyDamageFormula = Math.round(((((2 / 5 + 2) * allyPokemonAttack * 120) / enemyPokemonDefense / 50 + 2) * randomAllyInteger) / 255);
-    const enemyDamageFormula = Math.round(((((2 / 5 + 2) * enemyPokemonAttack * 120) / allyPokemonDefense / 50 + 2) * randomEnemyInteger) / 255);
-
-    const newEnemyHp = enemyHp - allyDamageFormula;
-    const newAllyHp = allyHp - enemyDamageFormula;
-
-    setEnemyHp(newEnemyHp);
-    setAllyHp(newAllyHp);
   }
+
+  function calculateDamage(attacker, defender) {
+    const attack = attacker.stats[1].base_stat;
+    const defense = defender.stats[2].base_stat;
+    return Math.round(((2 / 5 + 2) * attack * 120) / (defense * 50) + 2);
+  }
+
+  function handleCatch() {
+    playAudio('/src/components/audio/cute-level-up-3-189853.mp3');
+
+    setAllyPokemons((prev) => {
+      const newPokemonUrl = `https://pokeapi.co/api/v2/pokemon/${enemyPokemon.name}`;
+      if (prev.includes(newPokemonUrl)) {
+        return prev;
+      }
+
+      const updatedPokemons = [...prev, newPokemonUrl];
+      localStorage.setItem('allyPokemons', JSON.stringify(updatedPokemons));
+      return updatedPokemons;
+    });
+
+    setIsCaught(true);
+    setBattleOngoing(false);
+  }
+
+  function handleAllyDefeat() {
+    playAudio('/src/components/audio/videogame-death-sound-43894.mp3');
+    setAllyPokemons((prev) => {
+      const updatedPokemons = prev.filter((pokemon) => !pokemon.includes(allyPokemon.name));
+      localStorage.setItem('allyPokemons', JSON.stringify(updatedPokemons));
+      return updatedPokemons;
+    });
+    setIsDead(true);
+    setBattleOngoing(false);
+  }
+
+  function handleAttack() {
+    playAudio('/src/components/audio/Wood Rattle.mp3');
+
+    const newEnemyHp = enemyHp - calculateDamage(allyPokemon, enemyPokemon);
+    setEnemyHp(newEnemyHp);
+
+    if (newEnemyHp <= 0) {
+      handleCatch();
+      return;
+    }
+
+    const newAllyHp = allyHp - calculateDamage(enemyPokemon, allyPokemon);
+    setAllyHp(newAllyHp);
 
   if (allyHp > 0 && enemyHp > 0) {
     return (
