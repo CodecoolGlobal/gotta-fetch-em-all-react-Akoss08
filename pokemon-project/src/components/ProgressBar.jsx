@@ -1,8 +1,8 @@
-function ProgressBar(stat) {
+function ProgressBar({ name, value }) {
   return (
-    <div id={`${stat.name}Bar`}>
-      <p id="progressBarLabel">{stat.name}</p>
-      <progress value={stat.value} max={'200'} />
+    <div id={`${name}Bar`}>
+      <p id="progressBarLabel">{name}</p>
+      <progress value={value} max={'200'} />
     </div>
   );
 }
