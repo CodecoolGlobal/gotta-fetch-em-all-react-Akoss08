@@ -10,7 +10,7 @@ function PokemonEncounter() {
   const location = useLocation();
   const { locationUrl } = location.state;
 
-  const [allyPokemons, setAllyPokemons] = useState([
+  const storedAllyPokemons = JSON.parse(localStorage.getItem('allyPokemons')) || [
     'https://pokeapi.co/api/v2/pokemon/wailord',
     'https://pokeapi.co/api/v2/pokemon/mewtwo',
     'https://pokeapi.co/api/v2/pokemon/gengar',
