@@ -91,28 +91,29 @@ function PokemonEncounter() {
 
       {enemyPokemon && (
         <>
-          <EnemyPokemonCard pokemon={enemyPokemon} />
-          <PokemonModel
-            sprite={enemyPokemon.sprites.other.showdown['front_default']}
-            isLost={isCaught}
-            baseClass={'enemyPokemonModel'}
-            lostBattleClass={'caughtPokemon'}
-          />
+          {!isBattleStarted && <EnemyPokemonCard pokemon={enemyPokemon} />}
+          <PokemonModel sprite={getSpriteUrl(enemyPokemon)} isLost={isCaught} baseClass={'enemyPokemonModel'} lostBattleClass={'caughtPokemon'} />
         </>
       )}
 
-      <div>
-        <button className="runButton" onClick={() => navigate('/')}>
-          Runaway
-        </button>
-        <button className="attackButton">Battle</button>
-      </div>
-
       {selectedAllyPokemon && (
         <>
-          <AllyPokemonCard pokemon={selectedAllyPokemon} getPreviousPokemon={getPreviousPokemon} getNextPokemon={getNextPokemon} />
-          <PokemonModel sprite={selectedAllyPokemon.sprites.other.showdown['back_default']} isLost={isDead} baseClass={'userPokemonModel'} lostBattleClass={'allyDead'} />
+          {!isBattleStarted && <AllyPokemonCard pokemon={selectedAllyPokemon} getPreviousPokemon={getPreviousPokemon} getNextPokemon={getNextPokemon} />}
+          <PokemonModel sprite={getSpriteUrl(selectedAllyPokemon, 'back')} isLost={isDead} baseClass={'userPokemonModel'} lostBattleClass={'allyDead'} />
         </>
+      )}
+
+      {!isBattleStarted && (
+        <div>
+          <button className="runButton" onClick={() => navigate('/')}>
+            Runaway
+          </button>
+          {enemyPokemon && (
+            <button className="attackButton" onClick={() => setIsBattleStarted(true)}>
+              Battle
+            </button>
+          )}
+        </div>
       )}
     </div>
   );
