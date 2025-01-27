@@ -77,6 +77,10 @@ function PokemonEncounter() {
     }
   }
 
+  function getSpriteUrl(pokemon, type = 'front') {
+    return pokemon?.sprites?.other?.showdown?.[`${type}_default`];
+  }
+
   return (
     <div className="battleGround">
       {enemyPokemon && (
