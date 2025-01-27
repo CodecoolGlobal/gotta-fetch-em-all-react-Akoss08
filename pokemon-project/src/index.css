@@ -302,14 +302,17 @@ progress[value] {
   border-radius: 10em;
   background: var(--background);
 }
+
 progress[value]::-webkit-progress-bar {
   border-radius: 10em;
   background: var(--background);
 }
+
 progress[value]::-webkit-progress-value {
   border-radius: 10em;
   background: var(--color);
 }
+
 progress[value]::-moz-progress-bar {
   border-radius: 10em;
   background: var(--color);
@@ -702,6 +705,7 @@ progress[value]::-moz-progress-bar {
 .tombstone {
   position: absolute;
   top: 50%;
+  left: 27%;
   height: 220px;
   animation: appearTombstone 2s;
 }
@@ -739,7 +743,7 @@ progress[value]::-moz-progress-bar {
 .pokeball {
   position: absolute;
   right: 85%;
-  top: 70%;
+  top: 69%;
   width: 250px;
   height: 170px;
 }

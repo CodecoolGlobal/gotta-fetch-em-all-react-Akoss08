@@ -6,7 +6,7 @@ function HomePage() {
   const [locations, setLocations] = useState(null);
   const [pageNumber, setPageNumber] = useState(0);
   const navigate = useNavigate();
-
+// localStorage.clear();
   useEffect(() => {
     async function fetchLocations() {
       try {

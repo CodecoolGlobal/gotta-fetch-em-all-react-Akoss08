@@ -1,89 +1,124 @@
 import { useState, useEffect } from 'react';
 import HealthBar from './HealthBar';
+import { useNavigate } from 'react-router-dom';
 
-function Battle(properties) {
-  const [allyHp, setAllyHp] = useState(properties.allyPokemon.stats[0].base_stat);
-  const [enemyHp, setEnemyHp] = useState(properties.enemyPokemonStats[0].base_stat);
+function Battle({ allyPokemon, enemyPokemon, setIsCaught, setIsDead, setAllyPokemons }) {
+  const navigate = useNavigate();
+
+  const [allyHp, setAllyHp] = useState(allyPokemon.stats[0].base_stat);
+  const [enemyHp, setEnemyHp] = useState(enemyPokemon.stats[0].base_stat);
+
+  const [battleOngoing, setBattleOngoing] = useState(true);
+
+  function playAudio(src) {
+    const audio = new Audio(src);
+    audio.play();
+  }
+
+  function calculateDamage(attacker, defender) {
+    const attack = attacker.stats[1].base_stat;
+    const defense = defender.stats[2].base_stat;
+    return Math.round(((2 / 5 + 2) * attack * 120) / (defense * 50) + 2);
+  }
+
+  function handleCatch() {
+    playAudio('/src/components/audio/cute-level-up-3-189853.mp3');
+
+    setAllyPokemons((prev) => {
+      const newPokemonUrl = `https://pokeapi.co/api/v2/pokemon/${enemyPokemon.name}`;
+      if (prev.includes(newPokemonUrl)) {
+        return prev;
+      }
+
+      const updatedPokemons = [...prev, newPokemonUrl];
+      localStorage.setItem('allyPokemons', JSON.stringify(updatedPokemons));
+      return updatedPokemons;
+    });
+
+    setIsCaught(true);
+    setBattleOngoing(false);
+  }
+
+  function handleAllyDefeat() {
+    playAudio('/src/components/audio/videogame-death-sound-43894.mp3');
+    setAllyPokemons((prev) => {
+      const updatedPokemons = prev.filter((pokemon) => !pokemon.includes(allyPokemon.name));
+      localStorage.setItem('allyPokemons', JSON.stringify(updatedPokemons));
+      return updatedPokemons;
+    });
+    setIsDead(true);
+    setBattleOngoing(false);
+  }
+
+  function handleAttack() {
+    playAudio('/src/components/audio/Wood Rattle.mp3');
+
+    const newEnemyHp = enemyHp - calculateDamage(allyPokemon, enemyPokemon);
+    setEnemyHp(newEnemyHp);
+
+    if (newEnemyHp <= 0) {
+      handleCatch();
+      return;
+    }
+
+    const newAllyHp = allyHp - calculateDamage(enemyPokemon, allyPokemon);
+    setAllyHp(newAllyHp);
+
+    if (newAllyHp <= 0) {
+      handleAllyDefeat();
+    }
+  }
 
   useEffect(() => {
-    if (enemyHp <= 0) {
-      properties.setUserPokemons((prev) => [...prev, `https://pokeapi.co/api/v2/pokemon/${properties.enemyPokemonName}`]);
-      properties.setIsCaught(true);
-    } else if (allyHp <= 0) {
-      properties.setUserPokemons((prev) => prev.filter((pokemon) => !pokemon.includes(properties.allyPokemon.name)));
-      properties.setIsDead(true);
+    if (battleOngoing) {
+      const timer = setTimeout(handleAttack, 1000);
+      return () => clearTimeout(timer);
     }
-  }, [enemyHp]);
+  }, [allyHp, enemyHp, battleOngoing]);
 
-  function handleReturnClick() {
-    properties.setIsLocationClicked(false);
-  }
+  function renderBattleOutcome() {
+    if (allyHp <= 0) {
+      return (
+        <>
+          <img className="tombstone" src="/src/images/—Pngtree—creative halloween tombstone_1541022.png" alt="Tombstone" />
+          <h1 className="lost">
+            {allyPokemon.name} was brutally defeated by {enemyPokemon.name}
+          </h1>
+        </>
+      );
+    }
 
-  function handleAttack(currentUserPokemon, enemyPokemonStats) {
-    const audio = new Audio('/src/components/audio/Wood Rattle.mp3');
-    audio.play();
-    const allyPokemonAttack = currentUserPokemon.stats[1].base_stat;
-    const enemyPokemonAttack = enemyPokemonStats[1].base_stat;
+    if (enemyHp <= 0) {
+      return (
+        <>
+          <img className="pokeball" src="/src/images/m2i8N4N4K9i8N4i8-removebg-preview.png" alt="Pokeball" />
+          <h1 className="win">You caught {enemyPokemon.name}!</h1>
+        </>
+      );
+    }
 
-    const allyPokemonDefense = currentUserPokemon.stats[2].base_stat;
-    const enemyPokemonDefense = enemyPokemonStats[2].base_stat;
-
-    const randomAllyInteger = Math.floor(Math.random() * 38) + 217;
-    const randomEnemyInteger = Math.floor(Math.random() * 38) + 217;
-
-    const allyDamageFormula = Math.round(((((2 / 5 + 2) * allyPokemonAttack * 120) / enemyPokemonDefense / 50 + 2) * randomAllyInteger) / 255);
-    const enemyDamageFormula = Math.round(((((2 / 5 + 2) * enemyPokemonAttack * 120) / allyPokemonDefense / 50 + 2) * randomEnemyInteger) / 255);
-
-    const newEnemyHp = enemyHp - allyDamageFormula;
-    const newAllyHp = allyHp - enemyDamageFormula;
-
-    setEnemyHp(newEnemyHp);
-    setAllyHp(newAllyHp);
-  }
-
-  if (allyHp > 0 && enemyHp > 0) {
-    return (
-      <>
-        {setTimeout(() => handleAttack(properties.allyPokemon, properties.enemyPokemonStats), 1000)}
-        <div>
-          <button className="runButton" onClick={properties.handleBackClick}>
-            Runaway
-          </button>
-          <HealthBar allyHp={allyHp} allyHealth={properties.allyPokemon.stats[0].base_stat} enemyHp={enemyHp} enemyHealth={properties.enemyPokemonStats[0].base_stat} />
-          <h1 className="allyHp">{allyHp}</h1>
-          <h1 className="enemyHp">{enemyHp}</h1>
-        </div>
-      </>
-    );
-  } else if (allyHp <= 0) {
-    const audio = new Audio('/src/components/audio/videogame-death-sound-43894.mp3');
-    audio.play();
-    return (
-      <>
-        <img className="tombstone" src="/src/images/—Pngtree—creative halloween tombstone_1541022.png" />
-        <h1 className="lost">
-          {properties.allyPokemon.name} was brutally murdered by {properties.enemyPokemonName}
-        </h1>
-        <button onClick={handleReturnClick} className="return">
-          Return
-        </button>
-      </>
-    );
-  } else if (enemyHp <= 0) {
-    const audio = new Audio('/src/components/audio/cute-level-up-3-189853.mp3');
-    audio.play();
-    return (
-      <>
-        <img className="pokeball" src="/src/images/m2i8N4N4K9i8N4i8-removebg-preview.png" />
-        <h1 className="win">You Caught {properties.enemyPokemonName}</h1>
-        <button onClick={handleReturnClick} className="return">
-          Return
-        </button>
-      </>
-    );
-  } else {
     return null;
   }
+
+  return (
+    <div>
+      {!battleOngoing ? (
+        <>
+          {renderBattleOutcome()}
+          <button onClick={() => navigate('/')} className="return">
+            Return
+          </button>
+        </>
+      ) : (
+        <div>
+          <HealthBar allyHp={allyHp} allyHealth={allyPokemon.stats[0].base_stat} enemyHp={enemyHp} enemyHealth={enemyPokemon.stats[0].base_stat} />
+          <button className="runButton" onClick={() => navigate('/')}>
+            Runaway
+          </button>
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default Battle;

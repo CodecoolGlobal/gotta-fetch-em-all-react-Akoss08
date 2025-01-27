@@ -1,11 +1,11 @@
-function HealthBar(props) {
+function HealthBar({ allyHp, allyHealth, enemyHp, enemyHealth }) {
   return (
     <>
       <div className="allyHpBar">
-        <progress value={props.allyHp} max={props.allyHealth} style={{ accentColor: props.allyColor }} />
+        <progress value={allyHp} max={allyHealth} />
       </div>
       <div className="enemyHpBar">
-        <progress value={props.enemyHp} max={props.enemyHealth} style={{ accentColor: props.enemyColor }} />
+        <progress value={enemyHp} max={enemyHealth} />
       </div>
     </>
   );

@@ -10,17 +10,20 @@ function PokemonEncounter() {
   const location = useLocation();
   const { locationUrl } = location.state;
 
-  const [allyPokemons, setAllyPokemons] = useState([
+  const storedAllyPokemons = JSON.parse(localStorage.getItem('allyPokemons')) || [
     'https://pokeapi.co/api/v2/pokemon/wailord',
     'https://pokeapi.co/api/v2/pokemon/mewtwo',
     'https://pokeapi.co/api/v2/pokemon/gengar',
-  ]);
+  ];
+
+  const [allyPokemons, setAllyPokemons] = useState(storedAllyPokemons);
   const [enemyPokemon, setEnemyPokemon] = useState(null);
-  const [emptyLocation, setEmptyLocation] = useState(false);
+  const [isEmptyLocation, setIsEmptyLocation] = useState(false);
   const [selectedAllyPokemon, setSelectedAllyPokemon] = useState(null);
   const [isDead, setIsDead] = useState(false);
   const [isCaught, setIsCaught] = useState(false);
   const [currentPokemonIndex, setCurrentPokemonIndex] = useState(0);
+  const [isBattleStarted, setIsBattleStarted] = useState(false);
 
   useEffect(() => {
     async function fetchEnemyPokemon() {
@@ -35,10 +38,10 @@ function PokemonEncounter() {
 
           const pokemonResponse = await fetch(area['pokemon_encounters'][Math.floor(Math.random() * area['pokemon_encounters'].length)].pokemon.url);
           const pokemon = await pokemonResponse.json();
-          console.log(pokemon);
+
           setEnemyPokemon(pokemon);
         } else {
-          setEmptyLocation(true);
+          setIsEmptyLocation(true);
         }
       } catch (error) {
         console.error(`Error fetching from ${locationUrl}`);
@@ -56,7 +59,11 @@ function PokemonEncounter() {
     }
 
     fetchPokemonInfo();
-  }, [currentPokemonIndex, allyPokemons]);
+  }, [currentPokemonIndex]);
+
+  useEffect(() => {
+    localStorage.setItem('allyPokemons', JSON.stringify(allyPokemons));
+  }, [allyPokemons]);
 
   function getNextPokemon() {
     if (currentPokemonIndex < allyPokemons.length - 1) {
@@ -70,32 +77,43 @@ function PokemonEncounter() {
     }
   }
 
+  function getSpriteUrl(pokemon, type = 'front') {
+    return pokemon?.sprites?.other?.showdown?.[`${type}_default`];
+  }
+
   return (
     <div className="battleGround">
+      {isEmptyLocation && <h1>No Pokemon found here!</h1>}
+
+      {isBattleStarted && (
+        <Battle allyPokemon={selectedAllyPokemon} enemyPokemon={enemyPokemon} setIsCaught={setIsCaught} setIsDead={setIsDead} setAllyPokemons={setAllyPokemons} />
+      )}
+
       {enemyPokemon && (
         <>
-          <EnemyPokemonCard pokemon={enemyPokemon} />
-          <PokemonModel
-            sprite={enemyPokemon.sprites.other.showdown['front_default']}
-            isLost={isCaught}
-            baseClass={'enemyPokemonModel'}
-            lostBattleClass={'caughtPokemon'}
-          />
+          {!isBattleStarted && <EnemyPokemonCard pokemon={enemyPokemon} />}
+          <PokemonModel sprite={getSpriteUrl(enemyPokemon)} isLost={isCaught} baseClass={'enemyPokemonModel'} lostBattleClass={'caughtPokemon'} />
         </>
       )}
 
-      <div>
-        <button className="runButton" onClick={() => navigate('/')}>
-          Runaway
-        </button>
-        <button className="attackButton">Battle</button>
-      </div>
-
       {selectedAllyPokemon && (
         <>
-          <AllyPokemonCard pokemon={selectedAllyPokemon} getPreviousPokemon={getPreviousPokemon} getNextPokemon={getNextPokemon} />
-          <PokemonModel sprite={selectedAllyPokemon.sprites.other.showdown['back_default']} isLost={isDead} baseClass={'userPokemonModel'} lostBattleClass={'allyDead'} />
+          {!isBattleStarted && <AllyPokemonCard pokemon={selectedAllyPokemon} getPreviousPokemon={getPreviousPokemon} getNextPokemon={getNextPokemon} />}
+          <PokemonModel sprite={getSpriteUrl(selectedAllyPokemon, 'back')} isLost={isDead} baseClass={'userPokemonModel'} lostBattleClass={'allyDead'} />
         </>
+      )}
+
+      {!isBattleStarted && (
+        <div>
+          <button className="runButton" onClick={() => navigate('/')}>
+            Runaway
+          </button>
+          {enemyPokemon && (
+            <button className="attackButton" onClick={() => setIsBattleStarted(true)}>
+              Battle
+            </button>
+          )}
+        </div>
       )}
     </div>
   );
