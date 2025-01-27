@@ -83,6 +83,12 @@ function PokemonEncounter() {
 
   return (
     <div className="battleGround">
+      {isEmptyLocation && <h1>No Pokemon found here!</h1>}
+
+      {isBattleStarted && (
+        <Battle allyPokemon={selectedAllyPokemon} enemyPokemon={enemyPokemon} setIsCaught={setIsCaught} setIsDead={setIsDead} setAllyPokemons={setAllyPokemons} />
+      )}
+
       {enemyPokemon && (
         <>
           <EnemyPokemonCard pokemon={enemyPokemon} />
