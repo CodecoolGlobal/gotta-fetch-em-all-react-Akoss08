@@ -64,7 +64,20 @@ function Battle({ allyPokemon, enemyPokemon, setIsCaught, setIsDead, setAllyPoke
     const newAllyHp = allyHp - calculateDamage(enemyPokemon, allyPokemon);
     setAllyHp(newAllyHp);
 
-  if (allyHp > 0 && enemyHp > 0) {
+    if (newAllyHp <= 0) {
+      handleAllyDefeat();
+    }
+  }
+
+  useEffect(() => {
+    if (battleOngoing) {
+      const timer = setTimeout(handleAttack, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [allyHp, enemyHp, battleOngoing]);
+
+  function renderBattleOutcome() {
+    if (allyHp <= 0) {
     return (
       <>
         {setTimeout(() => handleAttack(properties.allyPokemon, properties.enemyPokemonStats), 1000)}
