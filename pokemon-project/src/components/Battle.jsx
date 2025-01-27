@@ -99,6 +99,26 @@ function Battle({ allyPokemon, enemyPokemon, setIsCaught, setIsDead, setAllyPoke
 
     return null;
   }
+
+  return (
+    <div>
+      {!battleOngoing ? (
+        <>
+          {renderBattleOutcome()}
+          <button onClick={() => navigate('/')} className="return">
+            Return
+          </button>
+        </>
+      ) : (
+        <div>
+          <HealthBar allyHp={allyHp} allyHealth={allyPokemon.stats[0].base_stat} enemyHp={enemyHp} enemyHealth={enemyPokemon.stats[0].base_stat} />
+          <button className="runButton" onClick={() => navigate('/')}>
+            Runaway
+          </button>
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default Battle;
