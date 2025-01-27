@@ -80,44 +80,23 @@ function Battle({ allyPokemon, enemyPokemon, setIsCaught, setIsDead, setAllyPoke
     if (allyHp <= 0) {
     return (
       <>
-        {setTimeout(() => handleAttack(properties.allyPokemon, properties.enemyPokemonStats), 1000)}
-        <div>
-          <button className="runButton" onClick={properties.handleBackClick}>
-            Runaway
-          </button>
-          <HealthBar allyHp={allyHp} allyHealth={properties.allyPokemon.stats[0].base_stat} enemyHp={enemyHp} enemyHealth={properties.enemyPokemonStats[0].base_stat} />
-          <h1 className="allyHp">{allyHp}</h1>
-          <h1 className="enemyHp">{enemyHp}</h1>
-        </div>
-      </>
-    );
-  } else if (allyHp <= 0) {
-    const audio = new Audio('/src/components/audio/videogame-death-sound-43894.mp3');
-    audio.play();
-    return (
-      <>
-        <img className="tombstone" src="/src/images/—Pngtree—creative halloween tombstone_1541022.png" />
+          <img className="tombstone" src="/src/images/—Pngtree—creative halloween tombstone_1541022.png" alt="Tombstone" />
         <h1 className="lost">
-          {properties.allyPokemon.name} was brutally murdered by {properties.enemyPokemonName}
+            {allyPokemon.name} was brutally defeated by {enemyPokemon.name}
         </h1>
-        <button onClick={handleReturnClick} className="return">
-          Return
-        </button>
       </>
     );
-  } else if (enemyHp <= 0) {
-    const audio = new Audio('/src/components/audio/cute-level-up-3-189853.mp3');
-    audio.play();
+    }
+
+    if (enemyHp <= 0) {
     return (
       <>
-        <img className="pokeball" src="/src/images/m2i8N4N4K9i8N4i8-removebg-preview.png" />
-        <h1 className="win">You Caught {properties.enemyPokemonName}</h1>
-        <button onClick={handleReturnClick} className="return">
-          Return
-        </button>
+          <img className="pokeball" src="/src/images/m2i8N4N4K9i8N4i8-removebg-preview.png" alt="Pokeball" />
+          <h1 className="win">You caught {enemyPokemon.name}!</h1>
       </>
     );
-  } else {
+    }
+
     return null;
   }
 }
