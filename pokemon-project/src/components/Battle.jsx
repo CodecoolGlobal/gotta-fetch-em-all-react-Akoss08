@@ -78,23 +78,23 @@ function Battle({ allyPokemon, enemyPokemon, setIsCaught, setIsDead, setAllyPoke
 
   function renderBattleOutcome() {
     if (allyHp <= 0) {
-    return (
-      <>
+      return (
+        <>
           <img className="tombstone" src="/src/images/—Pngtree—creative halloween tombstone_1541022.png" alt="Tombstone" />
-        <h1 className="lost">
+          <h1 className="lost">
             {allyPokemon.name} was brutally defeated by {enemyPokemon.name}
-        </h1>
-      </>
-    );
+          </h1>
+        </>
+      );
     }
 
     if (enemyHp <= 0) {
-    return (
-      <>
+      return (
+        <>
           <img className="pokeball" src="/src/images/m2i8N4N4K9i8N4i8-removebg-preview.png" alt="Pokeball" />
           <h1 className="win">You caught {enemyPokemon.name}!</h1>
-      </>
-    );
+        </>
+      );
     }
 
     return null;
