@@ -1,0 +1,28 @@
+.previous {
+  margin: 5px;
+  cursor: pointer;
+  position: absolute;
+  font-family: Rocher;
+  background-color: transparent;
+  left: 15%;
+  border-width: 3px;
+  border-color: black;
+  border-radius: 10px;
+}
+
+.next {
+  margin: 5px;
+  cursor: pointer;
+  position: absolute;
+  font-family: Rocher;
+  background-color: transparent;
+  right: 15%;
+  border-width: 3px;
+  border-color: black;
+  border-radius: 10px;
+}
+
+.previous:disabled,
+.next:disabled {
+  cursor: not-allowed;
+}

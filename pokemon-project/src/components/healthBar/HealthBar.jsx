@@ -1,3 +1,5 @@
+import './healthBar.css';
+
 function HealthBar({ allyHp, allyHealth, enemyHp, enemyHealth }) {
   return (
     <>

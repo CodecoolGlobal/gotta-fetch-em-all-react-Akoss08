@@ -1,0 +1,11 @@
+.allyHpBar {
+  position: absolute;
+  top: 50%;
+  left: 27%;
+}
+
+.enemyHpBar {
+  position: absolute;
+  top: 22%;
+  left: 56%;
+}

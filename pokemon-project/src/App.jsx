@@ -1,8 +1,8 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import HomePage from './components/HomePage';
-import Pokedex from './components/Pokedex';
-import PokemonEncounter from './components/PokemonEncounter';
-import PokedexCard from './components/PokedexCard';
+import HomePage from './pages/homePage/HomePage';
+import Pokedex from './pages/pokedex/Pokedex';
+import PokemonEncounter from './pages/pokemonEncounter/PokemonEncounter';
+import PokedexCard from './pages/pokedexCard/PokedexCard';
 
 function App() {
   const router = createBrowserRouter([
