@@ -33,11 +33,12 @@ function PokemonEncounter() {
         const location = await locationResponse.json();
 
         if (location.areas.length) {
-          const randomIndex = Math.floor(Math.random() * location.areas.length);
-          const areaResponse = await fetch(location.areas[randomIndex].url);
+          const randomAreaIndex = Math.floor(Math.random() * location.areas.length);
+          const areaResponse = await fetch(location.areas[randomAreaIndex].url);
           const area = await areaResponse.json();
+          const randomPokemonindex = Math.floor(Math.random() * area['pokemon_encounters'].length);
 
-          const pokemonResponse = await fetch(area['pokemon_encounters'][Math.floor(Math.random() * area['pokemon_encounters'].length)].pokemon.url);
+          const pokemonResponse = await fetch(area['pokemon_encounters'][randomPokemonindex].pokemon.url);
           const pokemon = await pokemonResponse.json();
 
           setEnemyPokemon(pokemon);

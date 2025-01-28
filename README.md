@@ -10,7 +10,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/CodecoolGlobal/gotta-fetch-em-all-react-Akoss08">
-    <img src="pokemon-project/src/images/mewtwo.jpg" alt="Logo" width="90" height="90">
+    <img src="pokemon-project/public/images/mewtwo.jpg" alt="Logo" width="90" height="90">
   </a>
 
   <h3 align="center">Gotta fetch 'em all</h3>
@@ -135,30 +135,51 @@ Once you have the game running, you can explore different locations, encounter w
 
 1. **Explore Locations**: On the main page, select different locations to encounter random Pokémon from that area.
 
-!SOME GIF!
+![Locations gif][locations-gif]
 
 2. **Battle Pokémon**: Choose one of your three base Pokémon to battle against the enemy Pokémon or run away. The battle is automated, and the outcome depends on their stats like health, damage, and defense.
 
-!SOME GIF!
+![battle gif][battle-gif]
 
 3. **Catch Pokémon**: If you win a battle, the enemy Pokémon is caught and added to your collection! If you lose, the selected Pokémon is gone.
 
-!SOME GIF!
+![loose gif][loose-gif]
 
 4. **Pokéball**: Click on the Pokéball icon to view all the existing Pokémon.
 
-!SOME GIF!
+![pokedex gif][pokedex-gif]
 
 ### Example: Random Pokémon Encounter
 
 Here’s a simplified snippet of how a random Pokémon is selected when you visit a new location:
 
 ```js
-function getRandomPokemon(location) {
-  const pokemons = location.pokemons;
-  const randomIndex = Math.floor(Math.random() * pokemons.length);
-  return pokemons[randomIndex];
-}
+useEffect(() => {
+  async function fetchEnemyPokemon() {
+    try {
+      const locationResponse = await fetch(locationUrl);
+      const location = await locationResponse.json();
+
+      if (location.areas.length) {
+        const randomAreaIndex = Math.floor(Math.random() * location.areas.length);
+        const areaResponse = await fetch(location.areas[randomAreaIndex].url);
+        const area = await areaResponse.json();
+        const randomPokemonindex = Math.floor(Math.random() * area['pokemon_encounters'].length);
+
+        const pokemonResponse = await fetch(area['pokemon_encounters'][randomPokemonindex].pokemon.url);
+        const pokemon = await pokemonResponse.json();
+
+        setEnemyPokemon(pokemon);
+      } else {
+        setIsEmptyLocation(true);
+      }
+    } catch (error) {
+      console.error(`Error fetching from ${locationUrl}`);
+    }
+  }
+
+  fetchEnemyPokemon();
+}, [locationUrl]);
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -167,18 +188,17 @@ function getRandomPokemon(location) {
 
 ## Contributing
 
-This project is currently read-only and not open to external contributions. 
-However, feel free to fork the repository for personal use or exploration. 
+This project is currently read-only and not open to external contributions.
+However, feel free to fork the repository for personal use or exploration.
 
 Don't forget to give the project a star if you like it! 🌟
 
 ### Top contributors:
+
 !NEED TO CHANGE AFTER PUBLIC ON CONTRIB.ROCKS!
 <a href="https://github.com/CodecoolGlobal/gotta-fetch-em-all-react-Akoss08/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=MAdem01/el-proyecte-grande-sprint-1" />
+<img src="https://contrib.rocks/image?repo=MAdem01/el-proyecte-grande-sprint-1" />
 </a>
-
-
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -191,16 +211,16 @@ Akos Horvath - [LinkedIn](https://www.linkedin.com/in/akos-horvath97/) - akos97@
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ACKNOWLEDGMENTS -->
+
 ## Acknowledgments
 
 We’d like to take a moment to thank the resources and tools that helped us bring this Pokémon game to life:
 
-* [Pokémon API](https://pokeapi.co/) – For providing the essential Pokémon data used in this game
-* [Vite](https://vite.dev/) – For offering fast and efficient development with minimal setup
-* [React](https://react.dev/) – For being the core framework powering the user interface.
-* [Shields.io](https://shields.io) – For generating beautiful badges used in the README
-* [GitHub Pages](https://pages.github.com) – For hosting and sharing the game with the world
-
+- [Pokémon API](https://pokeapi.co/) – For providing the essential Pokémon data used in this game
+- [Vite](https://vite.dev/) – For offering fast and efficient development with minimal setup
+- [React](https://react.dev/) – For being the core framework powering the user interface.
+- [Shields.io](https://shields.io) – For generating beautiful badges used in the README
+- [GitHub Pages](https://pages.github.com) – For hosting and sharing the game with the world
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -217,8 +237,12 @@ We’d like to take a moment to thank the resources and tools that helped us bri
 [issues-url]: https://github.com/CodecoolGlobal/gotta-fetch-em-all-react-Akoss08/issues
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/akos-horvath97/
-[battlescene-screenshoot]: /pokemon-project/src/images/battlescene.png
+[battlescene-screenshoot]: /pokemon-project/public/images/battlescene.png
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
 [React-url]: https://reactjs.org/
 [Vite.js]: https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white
 [Vite-url]: https://vite.dev/
+[locations-gif]: /pokemon-project/public/gifs/Untitled%20video%20-%20Made%20with%20Clipchamp.gif
+[battle-gif]: /pokemon-project/public/gifs/Untitled%20video%20-%20Made%20with%20Clipchamp%20(1).gif
+[loose-gif]: /pokemon-project/public/gifs/Untitled%20video%20-%20Made%20with%20Clipchamp%20(2).gif
+[pokedex-gif]: /pokemon-project/public/gifs/Untitled%20video%20-%20Made%20with%20Clipchamp%20(3).gif
