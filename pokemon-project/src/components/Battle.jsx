@@ -80,7 +80,7 @@ function Battle({ allyPokemon, enemyPokemon, setIsCaught, setIsDead, setAllyPoke
     if (allyHp <= 0) {
       return (
         <>
-          <img className="tombstone" src="/src/images/—Pngtree—creative halloween tombstone_1541022.png" alt="Tombstone" />
+          <img className="tombstone" src="/images/—Pngtree—creative halloween tombstone_1541022.png" alt="Tombstone" />
           <h1 className="lost">
             {allyPokemon.name} was brutally defeated by {enemyPokemon.name}
           </h1>
@@ -91,7 +91,7 @@ function Battle({ allyPokemon, enemyPokemon, setIsCaught, setIsDead, setAllyPoke
     if (enemyHp <= 0) {
       return (
         <>
-          <img className="pokeball" src="/src/images/m2i8N4N4K9i8N4i8-removebg-preview.png" alt="Pokeball" />
+          <img className="pokeball" src="/images/m2i8N4N4K9i8N4i8-removebg-preview.png" alt="Pokeball" />
           <h1 className="win">You caught {enemyPokemon.name}!</h1>
         </>
       );

@@ -1,9 +1,13 @@
 import ProgressBar from './ProgressBar';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-function PokedexCard(pokemonData) {
-  console.log(pokemonData);
+function PokedexCard() {
+  const location = useLocation();
+  const { pokemon } = location.state;
+  const navigate = useNavigate();
+
   return (
-    <>
+    <div className="pageWrapper">
       <div id="pokedex">
         <div id="left-panel">
           <div className="left-top-container">
@@ -33,7 +37,7 @@ function PokedexCard(pokemonData) {
                 <div className="mini-light red"></div>
                 <div className="mini-light red"></div>
               </div>
-              <img id="main-screen" src={pokemonData.data.sprites.other['official-artwork']['front_default']}></img>
+              <img id="main-screen" src={pokemon.sprites.other['official-artwork']['front_default']}></img>
               <div className="bottom-screen-lights">
                 <div className="small-light red">
                   <div className="dot light-red"></div>
@@ -50,36 +54,36 @@ function PokedexCard(pokemonData) {
           <div className="buttons-container">
             <div className="nav-buttons-container">
               <div className="green-screen">
-                <span id="name-screen">{pokemonData.data.name}</span>
+                <span id="name-screen">{pokemon.name}</span>
               </div>
             </div>
           </div>
         </div>
 
         <div id="right-panel">
-          <button id="pokedexBackButton" className="pokedexButton" onClick={() => pokemonData.handleBackClick(null)}>
+          <button id="pokedexBackButton" className="pokedexButton" onClick={() => navigate('/pokedex')}>
             X
           </button>
           <div className="empty-container"></div>
           <div id="about-screen" className="right-panel-screen">
-            Height: {pokemonData.data.height * 10}cm Weight: {pokemonData.data.weight}kg
+            Height: {pokemon.height * 10}cm Weight: {pokemon.weight}kg
           </div>
           <div id="stat-screen">
-            {pokemonData.data.stats.map((stat, index) => (
+            {pokemon.stats.map((stat, index) => (
               <ProgressBar key={index} value={stat['base_stat']} name={stat.stat.name}></ProgressBar>
             ))}
           </div>
           <div className="bottom-screens-container">
             <div id="type-screen" className="right-panel-screen">
-              {pokemonData.data.types[0].type.name}
+              {pokemon.types[0].type.name}
             </div>
             <div id="id-screen" className="right-panel-screen">
-              {pokemonData.data.id}
+              {pokemon.id}
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

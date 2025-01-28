@@ -1,167 +1,157 @@
 import { useEffect, useState } from 'react';
-import PokedexCard from './PokedexCard';
-import TypeIcons from './TypeIcons';
+import TypeFilter from './TypeFilter';
+import SearchBar from './SearchBar';
+import Pagination from './Pagination';
+import Pokemon from './Pokemon';
 
-function Pokedex(props) {
-  const [allPokemons, setAllPokemons] = useState([]);
+const TYPE_LIST = [
+  { name: 'fire', url: '/images/Fire_icon_Sleep.png' },
+  { name: 'water', url: '/images/Water_icon_Sleep.png' },
+  { name: 'electric', url: '/images/Electric_icon_Sleep.png' },
+  { name: 'dark', url: '/images/Dark_icon_Sleep.png' },
+  { name: 'bug', url: '/images/Bug_icon_Sleep.png' },
+  { name: 'dragon', url: '/images/Dragon_icon_Sleep.png' },
+  { name: 'fairy', url: '/images/Fairy_icon_Sleep.png' },
+  { name: 'fighting', url: '/images/Fighting_icon_Sleep.png' },
+  { name: 'flying', url: '/images/Flying_icon_Sleep.png' },
+  { name: 'ghost', url: '/images/Ghost_icon_Sleep.png' },
+  { name: 'grass', url: '/images/Grass_icon_Sleep.png' },
+  { name: 'ground', url: '/images/Ground_icon_Sleep.png' },
+  { name: 'ice', url: '/images/Ice_icon_Sleep.png' },
+  { name: 'normal', url: '/images/Normal_icon_Sleep.png' },
+  { name: 'poison', url: '/images/Poison_icon_Sleep.png' },
+  { name: 'psychic', url: '/images/Psychic_icon_Sleep.png' },
+  { name: 'rock', url: '/images/Rock_icon_Sleep.png' },
+  { name: 'steel', url: '/images/Steel_icon_Sleep.png' },
+];
+
+function Pokedex() {
   const [currentPagePokemons, setCurrentPagePokemons] = useState([]);
-  const [page, setPage] = useState(1);
-  const [pokemonSelected, setPokemonSelected] = useState(null);
+  const [allPokemons, setAllPokemons] = useState([]);
+  const [filteredPokemons, setFilteredPokemons] = useState([]);
+  const [allTypePokemons, setAllTypePokemons] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [url, setUrl] = useState('https://pokeapi.co/api/v2/pokemon?limit=1302');
-
-  const TYPE_LIST = [
-    { name: 'fire', url: 'https://archives.bulbagarden.net/media/upload/b/b3/Fire_icon_Sleep.png' },
-    { name: 'water', url: 'https://archives.bulbagarden.net/media/upload/2/25/Water_icon_Sleep.png' },
-    { name: 'electric', url: 'https://archives.bulbagarden.net/media/upload/4/4c/Electric_icon_Sleep.png' },
-    { name: 'dark', url: 'https://archives.bulbagarden.net/media/upload/1/18/Dark_icon_Sleep.png' },
-    { name: 'bug', url: 'https://archives.bulbagarden.net/media/upload/2/24/Bug_icon_Sleep.png' },
-    { name: 'dragon', url: 'https://archives.bulbagarden.net/media/upload/8/83/Dragon_icon_Sleep.png' },
-    { name: 'fairy', url: 'https://archives.bulbagarden.net/media/upload/2/20/Fairy_icon_Sleep.png' },
-    { name: 'fighting', url: 'https://archives.bulbagarden.net/media/upload/e/ed/Fighting_icon_Sleep.png' },
-    { name: 'flying', url: 'https://archives.bulbagarden.net/media/upload/3/3c/Flying_icon_Sleep.png' },
-    { name: 'ghost', url: 'https://archives.bulbagarden.net/media/upload/e/e3/Ghost_icon_Sleep.png' },
-    { name: 'grass', url: 'https://archives.bulbagarden.net/media/upload/e/ef/Grass_icon_Sleep.png' },
-    { name: 'ground', url: 'https://archives.bulbagarden.net/media/upload/2/2b/Ground_icon_Sleep.png' },
-    { name: 'ice', url: 'https://archives.bulbagarden.net/media/upload/d/d8/Ice_icon_Sleep.png' },
-    { name: 'normal', url: 'https://archives.bulbagarden.net/media/upload/e/eb/Normal_icon_Sleep.png' },
-    { name: 'poison', url: 'https://archives.bulbagarden.net/media/upload/3/31/Poison_icon_Sleep.png' },
-    { name: 'psychic', url: 'https://archives.bulbagarden.net/media/upload/6/6e/Psychic_icon_Sleep.png' },
-    { name: 'rock', url: 'https://archives.bulbagarden.net/media/upload/d/de/Rock_icon_Sleep.png' },
-    { name: 'steel', url: 'https://archives.bulbagarden.net/media/upload/c/c6/Steel_icon_Sleep.png' },
-  ];
+  const [offset, setOffset] = useState(0);
+  const [isTypeFilterActive, setIsTypeFilterActive] = useState(false);
+  const itemsPerPage = 15;
 
   useEffect(() => {
     async function fetchAllPokemons() {
       try {
-        const response = await fetch(url);
+        const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=1500');
         const data = await response.json();
-        console.log(data);
-        if (url === 'https://pokeapi.co/api/v2/pokemon?limit=1302') {
-          setAllPokemons(data.results);
-        } else {
-          setAllPokemons(data.pokemon);
-        }
+        setAllPokemons(data.results);
       } catch (err) {
-        console.error('Error fetching the pokemons');
+        console.error('Error fetching all Pokémon:', err);
       }
     }
     fetchAllPokemons();
-  }, [url]);
+  }, []);
 
   useEffect(() => {
-    async function fetchCurrentPagePokemons() {
-      if (searchTerm) {
-        if (url === 'https://pokeapi.co/api/v2/pokemon?limit=1302') {
-          const filteredResults = allPokemons.filter((pokemon) => pokemon.name.toLowerCase().includes(searchTerm.toLowerCase()));
+    async function fetchPokemons() {
+      try {
+        if (!isTypeFilterActive && !searchTerm) {
+          const response = await fetch(`https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${itemsPerPage}`);
+          const pokemonData = await response.json();
 
-          const firstPokemonId = (page - 1) * 15;
-          const lastPokemonId = firstPokemonId + 15;
-          const pageResults = filteredResults.slice(firstPokemonId, lastPokemonId);
+          const pokemonDetails = await fetchPokemonDetails(pokemonData.results);
 
-          const pokemonPromises = pageResults.map(async (pokemon) => {
-            const pokemonDataResponse = await fetch(pokemon.url);
-            const pokemonData = await pokemonDataResponse.json();
+          setCurrentPagePokemons(pokemonDetails);
+          setFilteredPokemons(pokemonDetails);
+        } else if (isTypeFilterActive && !searchTerm) {
+          const slicedPokemons = allTypePokemons.slice(offset, offset + itemsPerPage);
+          setCurrentPagePokemons(slicedPokemons);
+          setFilteredPokemons(slicedPokemons);
+        } else if (!isTypeFilterActive && searchTerm) {
+          const searchResults = filterPokemons(allPokemons);
 
-            return pokemonData;
-          });
+          const detailedResults = await fetchPokemonDetails(searchResults);
 
-          const pokemonsData = await Promise.all(pokemonPromises);
-          setCurrentPagePokemons(pokemonsData);
+          setCurrentPagePokemons(detailedResults);
+          setFilteredPokemons(detailedResults);
         } else {
-          const filteredResults = allPokemons.filter((pokemon) => pokemon.pokemon.name.toLowerCase().includes(searchTerm.toLowerCase()));
+          const searchResults = filterPokemons(allTypePokemons);
 
-          const firstPokemonId = (page - 1) * 15;
-          const lastPokemonId = firstPokemonId + 15;
-          const pageResults = filteredResults.slice(firstPokemonId, lastPokemonId);
-
-          const pokemonPromises = pageResults.map(async (pokemon) => {
-            const pokemonDataResponse = await fetch(pokemon.pokemon.url);
-            const pokemonData = await pokemonDataResponse.json();
-
-            return pokemonData;
-          });
-
-          const pokemonsData = await Promise.all(pokemonPromises);
-          setCurrentPagePokemons(pokemonsData);
+          setCurrentPagePokemons(searchResults);
+          setFilteredPokemons(searchResults);
         }
-      } else {
-        const firstPokemonId = (page - 1) * 15;
-        const lastPokemonId = firstPokemonId + 15;
-        const pageResults = allPokemons.slice(firstPokemonId, lastPokemonId);
-
-        const pokemonPromises = pageResults.map(async (pokemon) => {
-          if (url === 'https://pokeapi.co/api/v2/pokemon?limit=1302') {
-            const pokemonDataResponse = await fetch(pokemon.url);
-            const pokemonData = await pokemonDataResponse.json();
-            return pokemonData;
-          } else {
-            const pokemonDataResponse = await fetch(pokemon.pokemon.url);
-            const pokemonData = await pokemonDataResponse.json();
-            return pokemonData;
-          }
-        });
-
-        const pokemonsData = await Promise.all(pokemonPromises);
-        setCurrentPagePokemons(pokemonsData);
+      } catch (err) {
+        console.error(`Error fetching the pokemons: ${err}`);
       }
     }
-    fetchCurrentPagePokemons();
-  }, [page, searchTerm, allPokemons, url]);
+    fetchPokemons();
+  }, [offset, isTypeFilterActive, allTypePokemons, searchTerm]);
+
+  async function handleIconClick(typeName) {
+    try {
+      const response = await fetch(`https://pokeapi.co/api/v2/type/${typeName}`);
+      const pokemonData = await response.json();
+
+      const pokemonDetails = await fetchPokemonDetails(pokemonData.pokemon);
+      setAllTypePokemons(pokemonDetails.filter((pokemon) => pokemon));
+      setOffset(0);
+      setIsTypeFilterActive(true);
+    } catch (err) {
+      console.error('Error fetching the Pokémon details:', err);
+    }
+  }
+
+  function filterPokemons(pokemonList) {
+    return pokemonList.filter((pokemon) => pokemon.name.toLowerCase().startsWith(searchTerm.toLowerCase())).slice(offset, offset + itemsPerPage);
+  }
+
+  async function fetchPokemonDetails(pokemonList) {
+    const pokemonDetails = await Promise.all(
+      pokemonList.map(async (pokemon) => {
+        try {
+          const url = pokemon.url ? pokemon.url : pokemon.pokemon.url;
+          const response = await fetch(url);
+
+          if (!response.ok) throw new Error(`Error fetching data for ${pokemon.name}`);
+
+          return await response.json();
+        } catch (err) {
+          console.error(`Failed to fetch ${pokemon.name}:`, err);
+          return null;
+        }
+      })
+    );
+    return pokemonDetails.filter((pokemon) => pokemon);
+  }
 
   function handleNextButton() {
-    setPage(page + 1);
+    setOffset(offset + itemsPerPage);
   }
 
   function handlePreviousButton() {
-    setPage(page - 1);
+    setOffset(offset - itemsPerPage);
   }
 
-  function handleSearchChange(event) {
-    setSearchTerm(event.target.value);
-    setPage(1);
+  function handleResetSearch() {
+    setSearchTerm('');
+    setIsTypeFilterActive(false);
+    setOffset(0);
   }
 
-  if (!pokemonSelected) {
-    return (
-      <>
-        <div className="searchBar">
-          <input id="pokedexFilter" type="text" value={searchTerm} onChange={handleSearchChange} placeholder="Search Pokémon" />
-          <button id="backToAllButton" onClick={() => setUrl('https://pokeapi.co/api/v2/pokemon?limit=1302')}>
-            All
-          </button>
-          <div className="typeIcons">
-            {TYPE_LIST.map((type, index) => (
-              <TypeIcons key={index} image={type.url} type={`https://pokeapi.co/api/v2/type/${type.name}`} handleClick={setUrl}></TypeIcons>
-            ))}
-          </div>
-        </div>
-        <div className="pokedexContainer">
-          {currentPagePokemons &&
-            currentPagePokemons.map((pokemon, index) => (
-              <img
-                key={index}
-                src={pokemon.sprites['front_default'] ? pokemon.sprites['front_default'] : pokemon.sprites.other['official-artwork']['front_default']}
-                onClick={() => setPokemonSelected(pokemon)}
-              />
-            ))}
-          <div className="pokedexButtonContainer">
-            <button className="pokedexButton" onClick={handlePreviousButton} disabled={page === 1}>
-              Previous page
-            </button>
-            <button className="pokedexButton" onClick={() => props.handleBackClick(false)}>
-              Home
-            </button>
-            <button className="pokedexButton" onClick={handleNextButton} disabled={currentPagePokemons.length < 15}>
-              Next page
-            </button>
-          </div>
-        </div>
-      </>
-    );
-  } else {
-    return <PokedexCard data={pokemonSelected} handleBackClick={setPokemonSelected}></PokedexCard>;
+  function isLastPage() {
+    return currentPagePokemons.length < itemsPerPage;
   }
+
+  return (
+    <div className="pageWrapper">
+      <div className="searchBar">
+        <SearchBar searchTerm={searchTerm} onSearchChange={(e) => setSearchTerm(e.target.value)} onSearchReset={handleResetSearch} />
+        <TypeFilter typeList={TYPE_LIST} onIconClick={handleIconClick} />
+      </div>
+      <div className="pokedexContainer">
+        {filteredPokemons.map((pokemon, index) => (
+          <Pokemon pokemon={pokemon} key={pokemon.id || index} />
+        ))}
+        <Pagination offset={offset} onNextClick={handleNextButton} onPreviousClick={handlePreviousButton} isLastPage={isLastPage} />
+      </div>
+    </div>
+  );
 }
 
 export default Pokedex;

@@ -23,7 +23,7 @@ body,
   max-width: 100vw;
   height: 100vh;
   width: 100vw;
-  background-image: url('src/images/forest.jpg');
+  background-image: url('/images/forest.jpg');
   background-size: cover;
 }
 
@@ -35,7 +35,7 @@ body,
   max-width: 100vw;
   height: 100vh;
   width: 100vw;
-  background-image: url('src/images/chrysope-battle-background-new.jpg');
+  background-image: url('/images/chrysope-battle-background-new.jpg');
   background-position: center;
 }
 
@@ -723,6 +723,13 @@ progress[value]::-moz-progress-bar {
   border-radius: 50%;
   animation-name: toPokeBall;
   animation-duration: 2s;
+  animation-fill-mode: forwards;
+  transition: opacity 1s, visibility 1s;
+}
+
+.caughtPokemon.hidden {
+  opacity: 0;
+  visibility: hidden;
 }
 
 @keyframes toPokeBall {
@@ -736,7 +743,7 @@ progress[value]::-moz-progress-bar {
   }
   100% {
     transform: translate(-450%, 150%) rotateZ(360deg) scale(0.01, 0.01);
-    box-shadow: 0 0 400px 200px rgba(255, 255, 0, 0.8); /* Add glow at the end */
+    box-shadow: 0 0 400px 200px rgba(255, 255, 0, 0.8);
   }
 }
 
@@ -750,6 +757,13 @@ progress[value]::-moz-progress-bar {
 
 .allyDead {
   animation: ghost 3s;
+  animation-fill-mode: forwards;
+  transition: opacity 1s, visibility 1s;
+}
+
+.allyDead.hidden {
+  opacity: 0;
+  visibility: hidden;
 }
 
 @keyframes ghost {
