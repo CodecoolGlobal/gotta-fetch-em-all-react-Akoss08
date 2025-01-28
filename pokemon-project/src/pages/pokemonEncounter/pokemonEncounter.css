@@ -1,0 +1,142 @@
+.battleGround {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100vw;
+  height: 100vh;
+  width: 100vw;
+  background-image: url('/images/chrysope-battle-background-new.jpg');
+  background-position: center;
+}
+
+.runButton {
+  cursor: pointer;
+  position: absolute;
+  font-family: Rocher;
+  background-color: transparent;
+  top: 70%;
+  left: 45%;
+  font-size: xx-large;
+  border-width: 3px;
+  border-color: black;
+  border-radius: 10px;
+}
+
+.runButton:hover {
+  background-color: red;
+}
+
+.attackButton {
+  cursor: pointer;
+  position: absolute;
+  font-family: Rocher;
+  background-color: transparent;
+  top: 80%;
+  left: 47%;
+  font-size: xx-large;
+  border-width: 3px;
+  border-color: black;
+  border-radius: 10px;
+}
+
+.attackButton:hover {
+  background-color: hsl(120, 100%, 15%);
+}
+
+.pokemonCard {
+  text-align: center;
+  overflow: auto;
+  position: absolute;
+  height: 87vh;
+  width: 50vh;
+  top: 5%;
+  backdrop-filter: blur(5px);
+  border: 3px solid hsla(0, 0%, 20%, 0.612);
+  border-radius: 10px;
+  box-shadow: 7px 7px 5px hsla(0, 0%, 20%, 0.589);
+  p {
+    font-weight: bold;
+  }
+}
+
+#PokemonCardName {
+  margin: 0;
+  margin-left: 2%;
+  font-size: xx-large;
+  font-family: Rocher;
+}
+
+.progressBarLabel {
+  font-family: Rocher;
+}
+
+.enemyPokemonModel {
+  position: absolute;
+  top: 30%;
+  right: 30%;
+}
+
+.caughtPokemon {
+  border-radius: 50%;
+  animation-name: toPokeBall;
+  animation-duration: 2s;
+  animation-fill-mode: forwards;
+  transition: opacity 1s, visibility 1s;
+}
+
+.caughtPokemon.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+@keyframes toPokeBall {
+  0% {
+    transform: translate(0, 0) rotateZ(0deg) scale(1, 1);
+    box-shadow: 0 0 0 0 rgba(255, 255, 0, 0);
+  }
+  50% {
+    transform: translate(0, 0) rotateZ(0deg) scale(1.5, 1.5);
+    box-shadow: 0 0 0 0 rgba(255, 255, 0, 0);
+  }
+  100% {
+    transform: translate(-450%, 150%) rotateZ(360deg) scale(0.01, 0.01);
+    box-shadow: 0 0 400px 200px rgba(255, 255, 0, 0.8);
+  }
+}
+
+.userPokemonModel {
+  position: absolute;
+  top: 55%;
+  left: 27%;
+}
+
+.allyDead {
+  animation: ghost 3s;
+  animation-fill-mode: forwards;
+  transition: opacity 1s, visibility 1s;
+}
+
+.allyDead.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+@keyframes ghost {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-200px);
+    opacity: 0;
+  }
+}
+
+.enemyCard {
+  right: 5%;
+}
+
+.allyCard {
+  left: 5%;
+}
