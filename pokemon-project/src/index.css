@@ -23,7 +23,7 @@ body,
   max-width: 100vw;
   height: 100vh;
   width: 100vw;
-  background-image: url('src/images/forest.jpg');
+  background-image: url('/images/forest.jpg');
   background-size: cover;
 }
 
@@ -35,7 +35,7 @@ body,
   max-width: 100vw;
   height: 100vh;
   width: 100vw;
-  background-image: url('src/images/chrysope-battle-background-new.jpg');
+  background-image: url('/images/chrysope-battle-background-new.jpg');
   background-position: center;
 }
 
