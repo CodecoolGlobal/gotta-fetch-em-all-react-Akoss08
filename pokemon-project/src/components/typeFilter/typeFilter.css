@@ -1,0 +1,11 @@
+.typeIcons {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  max-height: 60%;
+  width: 15%;
+  left: 2.5%;
+  top: 30%;
+  overflow-y: scroll;
+}

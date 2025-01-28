@@ -1,0 +1,11 @@
+.typeIcon {
+  width: 30%;
+  height: 14%;
+  margin: 8%;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.typeIcon:hover {
+  transform: scale(1.5);
+}

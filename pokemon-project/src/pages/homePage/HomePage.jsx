@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Location from './Location';
+import Location from '../../components/location/Location';
+import './homePage.css';
 
 function HomePage() {
   const [locations, setLocations] = useState(null);
   const [pageNumber, setPageNumber] = useState(0);
   const navigate = useNavigate();
-// localStorage.clear();
+
   useEffect(() => {
     async function fetchLocations() {
       try {
@@ -22,15 +23,24 @@ function HomePage() {
   }, [pageNumber]);
 
   return (
-    <div className='pageWrapper'>
-      <img id="pokedexButton" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Pok%C3%A9_Ball_icon.svg" onClick={() => navigate('/pokedex')} alt="Pokedex" />
+    <div className="pageWrapper">
+      <img
+        className="pokeballButton"
+        src="https://upload.wikimedia.org/wikipedia/commons/5/53/Pok%C3%A9_Ball_icon.svg"
+        onClick={() => navigate('/pokedex')}
+        alt="Pokedex"
+      />
       <div className="LocationContainer">
         {locations?.map((location, index) => (
           <Location key={index} locationName={location.name} locationUrl={location.url} />
         ))}
       </div>
-      <button className="pageBack" onClick={() => setPageNumber(Math.max(0, pageNumber - 20))}>Back</button>
-      <button className="pageNext" onClick={() => setPageNumber(pageNumber + 20)}>Next</button>
+      <button className="pageBack" onClick={() => setPageNumber(Math.max(0, pageNumber - 20))} disabled={pageNumber < 1}>
+        Back
+      </button>
+      <button className="pageNext" onClick={() => setPageNumber(pageNumber + 20)}>
+        Next
+      </button>
     </div>
   );
 }

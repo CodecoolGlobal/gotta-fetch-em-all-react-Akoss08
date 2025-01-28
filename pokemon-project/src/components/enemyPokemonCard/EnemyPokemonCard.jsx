@@ -1,4 +1,4 @@
-import ProgressBar from './ProgressBar';
+import ProgressBar from '../progressBar/ProgressBar';
 
 function EnemyPokemonCard({ pokemon }) {
   return (

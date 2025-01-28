@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import HealthBar from './HealthBar';
+import HealthBar from '../healthBar/HealthBar';
 import { useNavigate } from 'react-router-dom';
+import './battle.css';
 
 function Battle({ allyPokemon, enemyPokemon, setIsCaught, setIsDead, setAllyPokemons }) {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ function Battle({ allyPokemon, enemyPokemon, setIsCaught, setIsDead, setAllyPoke
   }
 
   function handleCatch() {
-    playAudio('/src/components/audio/cute-level-up-3-189853.mp3');
+    playAudio('/audio/cute-level-up-3-189853.mp3');
 
     setAllyPokemons((prev) => {
       const newPokemonUrl = `https://pokeapi.co/api/v2/pokemon/${enemyPokemon.name}`;
@@ -40,7 +41,7 @@ function Battle({ allyPokemon, enemyPokemon, setIsCaught, setIsDead, setAllyPoke
   }
 
   function handleAllyDefeat() {
-    playAudio('/src/components/audio/videogame-death-sound-43894.mp3');
+    playAudio('/audio/videogame-death-sound-43894.mp3');
     setAllyPokemons((prev) => {
       const updatedPokemons = prev.filter((pokemon) => !pokemon.includes(allyPokemon.name));
       localStorage.setItem('allyPokemons', JSON.stringify(updatedPokemons));
@@ -51,7 +52,7 @@ function Battle({ allyPokemon, enemyPokemon, setIsCaught, setIsDead, setAllyPoke
   }
 
   function handleAttack() {
-    playAudio('/src/components/audio/Wood Rattle.mp3');
+    playAudio('/audio/Wood Rattle.mp3');
 
     const newEnemyHp = enemyHp - calculateDamage(allyPokemon, enemyPokemon);
     setEnemyHp(newEnemyHp);

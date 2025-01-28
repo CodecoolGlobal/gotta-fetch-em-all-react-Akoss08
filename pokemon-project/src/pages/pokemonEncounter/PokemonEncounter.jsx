@@ -1,9 +1,10 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import Battle from './Battle';
+import Battle from '../../components/battle/Battle';
 import { useState, useEffect } from 'react';
-import EnemyPokemonCard from './EnemyPokemonCard';
-import AllyPokemonCard from './AllyPokemonCard';
-import PokemonModel from './PokemonModel';
+import EnemyPokemonCard from '../../components/enemyPokemonCard/EnemyPokemonCard';
+import AllyPokemonCard from '../../components/allyPokemonCard/AllyPokemonCard';
+import PokemonModel from '../../components/pokemonModel/PokemonModel';
+import './pokemonEncounter.css';
 
 function PokemonEncounter() {
   const navigate = useNavigate();
@@ -81,6 +82,14 @@ function PokemonEncounter() {
     return pokemon?.sprites?.other?.showdown?.[`${type}_default`];
   }
 
+  function isFirst() {
+    return currentPokemonIndex === 0;
+  }
+
+  function isLast() {
+    return currentPokemonIndex + 1 === allyPokemons.length;
+  }
+
   return (
     <div className="battleGround">
       {isEmptyLocation && <h1>No Pokemon found here!</h1>}
@@ -98,7 +107,9 @@ function PokemonEncounter() {
 
       {selectedAllyPokemon && (
         <>
-          {!isBattleStarted && <AllyPokemonCard pokemon={selectedAllyPokemon} getPreviousPokemon={getPreviousPokemon} getNextPokemon={getNextPokemon} />}
+          {!isBattleStarted && (
+            <AllyPokemonCard pokemon={selectedAllyPokemon} getPreviousPokemon={getPreviousPokemon} getNextPokemon={getNextPokemon} isFirst={isFirst} isLast={isLast} />
+          )}
           <PokemonModel sprite={getSpriteUrl(selectedAllyPokemon, 'back')} isLost={isDead} baseClass={'userPokemonModel'} lostBattleClass={'allyDead'} />
         </>
       )}

@@ -1,4 +1,5 @@
-import TypeIcons from './TypeIcons';
+import TypeIcons from '../typeIcons/TypeIcons';
+import './typeFilter.css';
 
 function TypeFilter({ onIconClick, typeList }) {
   return (

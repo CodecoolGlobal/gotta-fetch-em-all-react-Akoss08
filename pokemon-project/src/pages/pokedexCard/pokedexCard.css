@@ -1,0 +1,261 @@
+#pokedex {
+  position: absolute;
+  height: 70%;
+  width: 60%;
+  display: flex;
+  top: 10%;
+  left: 19%;
+  border-radius: 10px;
+}
+
+#left-panel {
+  background-color: var(--main-bg-color);
+  box-sizing: border-box;
+  height: 100%;
+  width: 50%;
+  display: grid;
+  grid-template-rows: 23% 50% 27%;
+  border: solid black 3px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-top-right-radius: 7px;
+}
+
+.left-svg {
+  position: absolute;
+  z-index: +5;
+}
+
+.lights-container {
+  position: relative;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.big-light-boarder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 5px;
+  height: 60px;
+  width: 60px;
+  border: solid black;
+  border-radius: 50%;
+  background-color: white;
+}
+
+.big-light {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  border: solid black;
+}
+
+.blue {
+  background-color: #3298cb;
+}
+
+.big-dot {
+  height: 15px;
+  width: 15px;
+  position: relative;
+  top: 7px;
+  left: 10px;
+  border-radius: 50%;
+}
+
+.light-blue {
+  background-color: #85bdfe;
+}
+
+.small-lights-container {
+  margin-left: 15px;
+  margin-top: 10px;
+  width: 70px;
+  height: 100%;
+  display: flex;
+  align-self: start;
+  justify-content: space-around;
+}
+
+.small-light {
+  border: solid black;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+}
+
+.red {
+  background-color: #ff0000;
+}
+
+.dot {
+  height: 5px;
+  width: 5px;
+  position: relative;
+  top: 3px;
+  left: 3px;
+  border-radius: 50%;
+}
+
+.yellow {
+  background-color: #fecb65;
+}
+
+.green {
+  background-color: #32cb65;
+}
+
+.light-red {
+  background-color: #fe98cb;
+}
+
+.light-yellow {
+  background-color: #fefecb;
+}
+
+.light-green {
+  background-color: #98fe00;
+}
+
+.screen-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.screen {
+  position: absolute;
+  width: 35%;
+  height: 60%;
+  top: 15%;
+  border: solid black;
+  border-radius: 0 0 0 17%;
+  display: grid;
+  grid-template-rows: 10% 72% 18%;
+  background-color: white;
+}
+
+#main-screen {
+  height: 100%;
+  width: 80%;
+  justify-self: center;
+  background-color: var(--main-screen-bg-color);
+  border: solid black 2px;
+  border-radius: 5%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.bottom-screen-lights {
+  display: flex;
+  margin-top: 5px;
+  width: 75%;
+  justify-self: center;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bottom-screen-lights .small-light {
+  border: solid black 2px;
+  width: 12px;
+  height: 12px;
+}
+
+.green-screen {
+  width: 40%;
+  height: 10%;
+  left: 5%;
+  bottom: 10%;
+  border-radius: 5px;
+  border: solid black 2px;
+  background-color: #3ab47d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+}
+
+#name-screen {
+  width: 100%;
+  font-family: 'Press Start 2P', cursive;
+  text-align: center;
+  font-size: xx-large;
+  overflow-wrap: break-word;
+}
+
+#right-panel {
+  background-color: var(--main-bg-color);
+  box-sizing: border-box;
+  position: relative;
+  height: 100%;
+  width: 50%;
+  display: grid;
+  grid-template-rows: 24% repeat(4, 19%);
+  border-bottom-right-radius: 10px;
+  border: solid black 3px;
+  border-radius: 10px;
+}
+
+#pokedexBackButton {
+  position: absolute;
+  top: 2%;
+  right: 2.5%;
+  border: none;
+}
+
+#about-screen {
+  position: absolute;
+  top: 5%;
+  left: 10%;
+}
+
+.right-panel-screen {
+  font-family: 'Press Start 2P', cursive;
+  width: 80%;
+  height: 64px;
+  background-color: var(--secondary-screen-bg-color);
+  border: solid black 2px;
+  border-radius: 4px;
+  font-size: medium;
+  padding-left: 2px;
+  padding-right: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: left;
+  padding-left: 8px;
+  line-height: 2;
+}
+
+.bottom-screens-container .right-panel-screen {
+  position: absolute;
+  width: 30%;
+  height: 12%;
+  font-size: x-large;
+  bottom: 1%;
+}
+
+#stat-screen {
+  position: absolute;
+  left: 20%;
+  top: 23%;
+  width: 90%;
+}
+
+#id-screen {
+  right: 10%;
+}
+
+#type-screen {
+  left: 10%;
+}
+
+.line {
+  width: 18px;
+  height: 2px;
+  background-color: black;
+  margin-top: 2px;
+}

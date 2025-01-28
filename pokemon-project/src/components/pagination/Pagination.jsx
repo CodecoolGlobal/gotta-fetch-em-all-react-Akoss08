@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import './pagination.css';
 
 function Pagination({ offset, onNextClick, onPreviousClick, isLastPage }) {
   const navigate = useNavigate();

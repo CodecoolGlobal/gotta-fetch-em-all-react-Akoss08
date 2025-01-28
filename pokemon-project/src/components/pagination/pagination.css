@@ -1,0 +1,22 @@
+.pokedexButtonContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: 30%;
+}
+
+.pokedexButton {
+  font-family: Rocher;
+  background-color: transparent;
+  font-size: x-large;
+  cursor: pointer;
+}
+.pokedexButton:hover {
+  background-color: red;
+}
+
+.pokedexButton:disabled {
+  cursor: not-allowed;
+  background-color: rgba(130, 0, 0, 0.256);
+}

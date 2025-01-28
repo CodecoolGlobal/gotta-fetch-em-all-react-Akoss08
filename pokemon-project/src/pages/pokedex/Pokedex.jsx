@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import TypeFilter from './TypeFilter';
-import SearchBar from './SearchBar';
-import Pagination from './Pagination';
-import Pokemon from './Pokemon';
+import TypeFilter from '../../components/typeFilter/TypeFilter';
+import SearchBar from '../../components/searchBar/SearchBar';
+import Pagination from '../../components/pagination/Pagination';
+import Pokemon from '../../components/pokemon/Pokemon';
+import './pokedex.css';
 
 const TYPE_LIST = [
   { name: 'fire', url: '/images/Fire_icon_Sleep.png' },
@@ -140,7 +141,7 @@ function Pokedex() {
 
   return (
     <div className="pageWrapper">
-      <div className="searchBar">
+      <div>
         <SearchBar searchTerm={searchTerm} onSearchChange={(e) => setSearchTerm(e.target.value)} onSearchReset={handleResetSearch} />
         <TypeFilter typeList={TYPE_LIST} onIconClick={handleIconClick} />
       </div>

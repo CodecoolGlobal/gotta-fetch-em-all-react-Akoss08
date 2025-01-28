@@ -1,0 +1,41 @@
+.resetButton {
+  position: absolute;
+  left: 15.65%;
+  top: 25%;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  font-size: 1rem;
+  color: #000000;
+}
+
+.resetButton:hover {
+  border-right: 2px solid black;
+  border-left: 2px solid black;
+  border-top: 2px solid black;
+  border-radius: 20%;
+}
+
+.pokedexFilter {
+  position: absolute;
+  left: 4%;
+  top: 25%;
+  border-bottom: 2px solid black;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  background-color: transparent;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+  font-size: 1rem;
+}
+
+.pokedexFilter:focus {
+  outline: none;
+  border-color: #7878782d;
+  background-color: #a22c2c57;
+}
+
+.pokedexFilter::placeholder {
+  color: #000000;
+}

@@ -1,5 +1,6 @@
-import ProgressBar from './ProgressBar';
+import ProgressBar from '../../components/progressBar/ProgressBar';
 import { useLocation, useNavigate } from 'react-router-dom';
+import './pokedexCard.css';
 
 function PokedexCard() {
   const location = useLocation();
@@ -10,7 +11,7 @@ function PokedexCard() {
     <div className="pageWrapper">
       <div id="pokedex">
         <div id="left-panel">
-          <div className="left-top-container">
+          <div>
             <svg height="100" width="225" className="left-svg"></svg>
             <div className="lights-container">
               <div className="big-light-boarder">
@@ -33,16 +34,13 @@ function PokedexCard() {
           </div>
           <div className="screen-container">
             <div className="screen">
-              <div className="top-screen-lights">
-                <div className="mini-light red"></div>
-                <div className="mini-light red"></div>
-              </div>
+              <div></div>
               <img id="main-screen" src={pokemon.sprites.other['official-artwork']['front_default']}></img>
               <div className="bottom-screen-lights">
                 <div className="small-light red">
                   <div className="dot light-red"></div>
                 </div>
-                <div className="burger">
+                <div>
                   <div className="line"></div>
                   <div className="line"></div>
                   <div className="line"></div>
@@ -51,8 +49,8 @@ function PokedexCard() {
               </div>
             </div>
           </div>
-          <div className="buttons-container">
-            <div className="nav-buttons-container">
+          <div>
+            <div>
               <div className="green-screen">
                 <span id="name-screen">{pokemon.name}</span>
               </div>
@@ -64,7 +62,6 @@ function PokedexCard() {
           <button id="pokedexBackButton" className="pokedexButton" onClick={() => navigate('/pokedex')}>
             X
           </button>
-          <div className="empty-container"></div>
           <div id="about-screen" className="right-panel-screen">
             Height: {pokemon.height * 10}cm Weight: {pokemon.weight}kg
           </div>
