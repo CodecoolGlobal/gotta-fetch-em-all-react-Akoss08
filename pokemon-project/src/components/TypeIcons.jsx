@@ -1,11 +1,5 @@
-function TypeIcons(props) {
-  return (
-    <img
-      className="typeIcon"
-      src={props.image}
-      onClick={() => props.handleClick(props.type)}
-    ></img>
-  );
+function TypeIcons({ image, type, onIconClick }) {
+  return <img className="typeIcon" src={image} onClick={() => onIconClick(type)}></img>;
 }
 
 export default TypeIcons;
